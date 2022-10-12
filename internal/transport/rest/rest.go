@@ -6,7 +6,20 @@ import (
 	"github.com/supernova0730/ae86/internal/container"
 	"github.com/supernova0730/ae86/pkg/logger"
 	"go.uber.org/zap"
+	"net"
 )
+
+type Config struct {
+	Host      string
+	Port      string
+	TLSEnable bool
+	CertFile  string
+	KeyFile   string
+}
+
+func (c Config) Address() string {
+	return net.JoinHostPort(c.Host, c.Port)
+}
 
 func Start(config Config, controller *container.ControllerContainer) {
 	app := fiber.New(fiber.Config{
@@ -15,7 +28,6 @@ func Start(config Config, controller *container.ControllerContainer) {
 		DisableStartupMessage: true,
 	})
 
-	RegisterMiddlewares(app)
 	RegisterRoutes(app, controller)
 
 	address := config.Address()
@@ -29,9 +41,4 @@ func Start(config Config, controller *container.ControllerContainer) {
 	if err != nil {
 		logger.Log.Fatal("failed to start rest server", zap.Error(err))
 	}
-}
-
-func RegisterMiddlewares(app *fiber.App) {
-	app.Use(SetContextHolder())
-	app.Use(SetStoreID())
 }

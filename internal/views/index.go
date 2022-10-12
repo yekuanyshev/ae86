@@ -1,6 +1,7 @@
 package views
 
 type Index struct {
+	StoreTitle string     `json:"storeTitle"`
 	Banners    []string   `json:"banners"`
 	Categories []Category `json:"categories"`
 }

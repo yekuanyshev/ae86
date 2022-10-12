@@ -1,14 +1,21 @@
 package logger
 
 import (
+	"context"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 	"os"
 )
 
+type ExtractContextFunc func(ctx context.Context) (key string, value interface{})
+
 var (
 	Log *zap.Logger
 )
+
+func LogCtx(ctx context.Context, f ExtractContextFunc) *zap.Logger {
+	return Log.With(zap.Any(f(ctx)))
+}
 
 func Init() {
 	encoder := getEncoder()

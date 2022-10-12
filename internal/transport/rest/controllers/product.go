@@ -23,7 +23,7 @@ func (ctl *ProductController) ListByCategoryID(c *fiber.Ctx) error {
 		})
 	}
 
-	result, err := ctl.service.Product().ListByCategoryID(c.Context(), int64(categoryID))
+	result, err := ctl.service.Product().ListByCategoryID(c.UserContext(), int64(categoryID))
 	if err != nil {
 		return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
 			"error": err.Error(),
@@ -34,9 +34,9 @@ func (ctl *ProductController) ListByCategoryID(c *fiber.Ctx) error {
 }
 
 func (ctl *ProductController) Search(c *fiber.Ctx) error {
-	storeID := utils.GetStoreID(c.UserContext())
+	storeID := utils.GetMeta(c.UserContext()).StoreID
 	searchText := c.Query("text")
-	result, err := ctl.service.Product().Search(c.Context(), storeID, searchText)
+	result, err := ctl.service.Product().Search(c.UserContext(), storeID, searchText)
 	if err != nil {
 		return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
 			"error": err.Error(),

@@ -1,7 +1,11 @@
 package utils
 
 const (
-	AttributeContextHolder = "ContextHolder"
-
-	AttributeStoreID = "AttributeStoreID"
+	AttributeStoreID              = "AttributeStoreID"
+	AttributeRequestID            = "AttributeRequestID"
+	AttributeCustomerExternalID   = "AttributeCustomerExternalID"
+	AttributeCustomerUsername     = "AttributeCustomerUsername"
+	AttributeCustomerFirstName    = "AttributeCustomerFirstName"
+	AttributeCustomerLastName     = "AttributeCustomerLastName"
+	AttributeCustomerLanguageCode = "AttributeCustomerLanguageCode"
 )

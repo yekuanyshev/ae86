@@ -16,8 +16,8 @@ func NewIndexController(service container.IService) *IndexController {
 }
 
 func (ctl *IndexController) Get(c *fiber.Ctx) error {
-	storeID := utils.GetStoreID(c.UserContext())
-	result, err := ctl.service.Index().Get(c.Context(), storeID)
+	storeID := utils.GetMeta(c.UserContext()).StoreID
+	result, err := ctl.service.Index().Get(c.UserContext(), storeID)
 	if err != nil {
 		return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
 			"error": err.Error(),

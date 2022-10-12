@@ -2,7 +2,7 @@ package repository
 
 import (
 	"context"
-	"github.com/supernova0730/ae86/internal/repository/model"
+	"github.com/supernova0730/ae86/internal/model"
 )
 
 type IProductRepository interface {

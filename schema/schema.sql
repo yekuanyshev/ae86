@@ -50,7 +50,7 @@ CREATE TABLE IF NOT EXISTS product
 CREATE TABLE IF NOT EXISTS customer
 (
     id          SERIAL PRIMARY KEY,
-    external_id BIGINT      NOT NULL,
+    external_id VARCHAR NOT NULL,
     username    VARCHAR,
     phone       VARCHAR,
     first_name  VARCHAR,

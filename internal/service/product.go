@@ -3,7 +3,7 @@ package service
 import (
 	"context"
 	"github.com/supernova0730/ae86/internal/interfaces/container"
-	"github.com/supernova0730/ae86/internal/transport/views"
+	"github.com/supernova0730/ae86/internal/views"
 )
 
 type ProductService struct {

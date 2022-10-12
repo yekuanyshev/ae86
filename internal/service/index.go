@@ -3,10 +3,11 @@ package service
 import (
 	"context"
 	"github.com/supernova0730/ae86/internal/interfaces/container"
-	"github.com/supernova0730/ae86/internal/transport/views"
+	"github.com/supernova0730/ae86/internal/views"
 )
 
 type IndexService struct {
+	service    container.IService
 	repository container.IRepository
 }
 
@@ -15,6 +16,8 @@ func NewIndexService(repository container.IRepository) *IndexService {
 }
 
 func (service *IndexService) Get(ctx context.Context, storeID int64) (view views.Index, err error) {
+	// todo: check customer existence
+
 	store, err := service.repository.Store().ByID(ctx, storeID)
 	if err != nil {
 		return
@@ -30,6 +33,7 @@ func (service *IndexService) Get(ctx context.Context, storeID int64) (view views
 		return
 	}
 
+	view.StoreTitle = store.Title
 	for _, banner := range banners {
 		view.Banners = append(view.Banners, banner.Image)
 	}
