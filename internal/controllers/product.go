@@ -3,6 +3,7 @@ package controllers
 import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/supernova0730/ae86/internal/interfaces/container"
+	"github.com/supernova0730/ae86/internal/transport/utils"
 	"net/http"
 )
 
@@ -33,15 +34,9 @@ func (ctl *ProductController) ListByCategoryID(c *fiber.Ctx) error {
 }
 
 func (ctl *ProductController) Search(c *fiber.Ctx) error {
-	storeID, err := c.ParamsInt("store_id", 0)
-	if err != nil {
-		return c.Status(http.StatusBadRequest).JSON(fiber.Map{
-			"error": err.Error(),
-		})
-	}
-
+	storeID := utils.GetStoreID(c.UserContext())
 	searchText := c.Query("text")
-	result, err := ctl.service.Product().Search(c.Context(), int64(storeID), searchText)
+	result, err := ctl.service.Product().Search(c.Context(), storeID, searchText)
 	if err != nil {
 		return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
 			"error": err.Error(),

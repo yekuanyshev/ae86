@@ -15,7 +15,7 @@ func Start(config Config, controller *container.ControllerContainer) {
 		DisableStartupMessage: true,
 	})
 
-	// set middlewares
+	RegisterMiddlewares(app)
 	RegisterRoutes(app, controller)
 
 	address := config.Address()
@@ -29,4 +29,9 @@ func Start(config Config, controller *container.ControllerContainer) {
 	if err != nil {
 		logger.Log.Fatal("failed to start rest server", zap.Error(err))
 	}
+}
+
+func RegisterMiddlewares(app *fiber.App) {
+	app.Use(SetContextHolder())
+	app.Use(SetStoreID())
 }

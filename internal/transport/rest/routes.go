@@ -11,9 +11,9 @@ func RegisterRoutes(r fiber.Router, controller *container.ControllerContainer) {
 		return c.JSON("pong")
 	})
 
-	v1.Get("/index/:store_id", controller.Index().Get)
+	v1.Get("/index", controller.Index().Get)
 
 	productRouter := v1.Group("/product")
-	productRouter.Get("/:store_id/search", controller.Product().Search)
+	productRouter.Get("/search", controller.Product().Search)
 	productRouter.Get("/by_category_id/:category_id", controller.Product().ListByCategoryID)
 }

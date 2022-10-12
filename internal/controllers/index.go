@@ -3,6 +3,7 @@ package controllers
 import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/supernova0730/ae86/internal/interfaces/container"
+	"github.com/supernova0730/ae86/internal/transport/utils"
 	"net/http"
 )
 
@@ -15,14 +16,8 @@ func NewIndexController(service container.IService) *IndexController {
 }
 
 func (ctl *IndexController) Get(c *fiber.Ctx) error {
-	storeID, err := c.ParamsInt("store_id", 0)
-	if err != nil {
-		return c.Status(http.StatusBadRequest).JSON(fiber.Map{
-			"error": err.Error(),
-		})
-	}
-
-	result, err := ctl.service.Index().Get(c.Context(), int64(storeID))
+	storeID := utils.GetStoreID(c.UserContext())
+	result, err := ctl.service.Index().Get(c.Context(), storeID)
 	if err != nil {
 		return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
 			"error": err.Error(),
