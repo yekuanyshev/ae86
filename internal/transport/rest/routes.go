@@ -25,8 +25,8 @@ func RegisterRoutes(r fiber.Router) {
 	productRouter.Get("/by_id/:id", controller.Product().ByID)
 	productRouter.Get("/by_category_id/:category_id", controller.Product().ListByCategoryID)
 
-	// todo: serving static files
 	fileRouter := v1.Group("/file")
+	fileRouter.Get("/:filename", controller.File().Get)
 	fileRouter.Post("/upload", controller.File().Upload)
 	fileRouter.Post("/uploads", controller.File().Uploads)
 }

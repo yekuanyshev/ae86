@@ -1,9 +1,12 @@
 package controllers
 
 import (
+	"bytes"
+	"errors"
 	"github.com/gofiber/fiber/v2"
 	"github.com/supernova0730/ae86/internal/interfaces/container"
 	"github.com/supernova0730/ae86/pkg/minio"
+	"io"
 	"mime/multipart"
 	"net/http"
 )
@@ -14,6 +17,25 @@ type FileController struct {
 
 func NewFileController(service container.IService) *FileController {
 	return &FileController{service: service}
+}
+
+func (ctl *FileController) Get(c *fiber.Ctx) error {
+	filename := c.Params("filename")
+	if len(filename) == 0 {
+		return c.Status(http.StatusBadRequest).JSON(fiber.Map{
+			"error": errors.New("empty filename").Error(),
+		})
+	}
+
+	file, err := ctl.service.FileStorage().Download(c.UserContext(), filename)
+	if err != nil {
+		return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
+			"error": err.Error(),
+		})
+	}
+
+	c.Set(fiber.HeaderContentType, file.ContentType)
+	return c.Status(http.StatusOK).SendStream(file.Content)
 }
 
 func (ctl *FileController) Upload(c *fiber.Ctx) error {
@@ -66,14 +88,19 @@ func (ctl *FileController) uploadFile(c *fiber.Ctx, fileHeader *multipart.FileHe
 	}
 	defer content.Close()
 
-	contentType := c.GetReqHeaders()["Content-Type"]
-	file := &minio.File{
-		Content:     content,
-		Name:        fileHeader.Filename,
-		Size:        fileHeader.Size,
-		ContentType: contentType,
+	raw, err := io.ReadAll(content)
+	if err != nil {
+		return "", c.Status(http.StatusInternalServerError).JSON(fiber.Map{
+			"error": err.Error(),
+		})
 	}
 
+	file := &minio.File{
+		Content:     bytes.NewBuffer(raw),
+		Name:        fileHeader.Filename,
+		Size:        fileHeader.Size,
+		ContentType: http.DetectContentType(raw),
+	}
 	filename, err := ctl.service.FileStorage().Upload(c.UserContext(), file)
 	if err != nil {
 		return "", c.Status(http.StatusInternalServerError).JSON(fiber.Map{
