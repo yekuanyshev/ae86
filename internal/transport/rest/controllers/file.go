@@ -5,6 +5,7 @@ import (
 	"errors"
 	"github.com/gofiber/fiber/v2"
 	"github.com/supernova0730/ae86/internal/interfaces/container"
+	"github.com/supernova0730/ae86/internal/transport/rest/response"
 	"github.com/supernova0730/ae86/pkg/minio"
 	"io"
 	"mime/multipart"
@@ -22,16 +23,12 @@ func NewFileController(service container.IService) *FileController {
 func (ctl *FileController) Get(c *fiber.Ctx) error {
 	filename := c.Params("filename")
 	if len(filename) == 0 {
-		return c.Status(http.StatusBadRequest).JSON(fiber.Map{
-			"error": errors.New("empty filename").Error(),
-		})
+		return response.Error(c, http.StatusBadRequest, errors.New("empty filename"))
 	}
 
 	file, err := ctl.service.FileStorage().Download(c.UserContext(), filename)
 	if err != nil {
-		return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
-			"error": err.Error(),
-		})
+		return response.Error(c, http.StatusInternalServerError, err)
 	}
 
 	c.Set(fiber.HeaderContentType, file.ContentType)
@@ -41,9 +38,7 @@ func (ctl *FileController) Get(c *fiber.Ctx) error {
 func (ctl *FileController) Upload(c *fiber.Ctx) error {
 	src, err := c.FormFile("file")
 	if err != nil {
-		return c.Status(http.StatusBadRequest).JSON(fiber.Map{
-			"error": err.Error(),
-		})
+		return response.Error(c, http.StatusBadRequest, err)
 	}
 
 	filename, err := ctl.uploadFile(c, src)
@@ -59,9 +54,7 @@ func (ctl *FileController) Upload(c *fiber.Ctx) error {
 func (ctl *FileController) Uploads(c *fiber.Ctx) error {
 	multipartForm, err := c.MultipartForm()
 	if err != nil {
-		return c.Status(http.StatusBadRequest).JSON(fiber.Map{
-			"error": err.Error(),
-		})
+		return response.Error(c, http.StatusBadRequest, err)
 	}
 
 	var filenames []string
@@ -82,17 +75,13 @@ func (ctl *FileController) Uploads(c *fiber.Ctx) error {
 func (ctl *FileController) uploadFile(c *fiber.Ctx, fileHeader *multipart.FileHeader) (string, error) {
 	content, err := fileHeader.Open()
 	if err != nil {
-		return "", c.Status(http.StatusBadRequest).JSON(fiber.Map{
-			"error": err.Error(),
-		})
+		return "", response.Error(c, http.StatusBadRequest, err)
 	}
 	defer content.Close()
 
 	raw, err := io.ReadAll(content)
 	if err != nil {
-		return "", c.Status(http.StatusInternalServerError).JSON(fiber.Map{
-			"error": err.Error(),
-		})
+		return "", response.Error(c, http.StatusInternalServerError, err)
 	}
 
 	file := &minio.File{
@@ -103,9 +92,7 @@ func (ctl *FileController) uploadFile(c *fiber.Ctx, fileHeader *multipart.FileHe
 	}
 	filename, err := ctl.service.FileStorage().Upload(c.UserContext(), file)
 	if err != nil {
-		return "", c.Status(http.StatusInternalServerError).JSON(fiber.Map{
-			"error": err.Error(),
-		})
+		return "", response.Error(c, http.StatusInternalServerError, err)
 	}
 
 	return filename, nil

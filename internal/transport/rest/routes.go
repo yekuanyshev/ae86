@@ -2,6 +2,7 @@ package rest
 
 import (
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/supernova0730/ae86/internal/container"
 	"github.com/supernova0730/ae86/internal/transport/rest/controllers"
 	"github.com/supernova0730/ae86/internal/transport/rest/middlewares"
@@ -10,6 +11,8 @@ import (
 func RegisterRoutes(r fiber.Router) {
 	controller := controllers.NewContainer(container.MContainer.Services())
 
+	r.Use(middlewares.Recover())
+	r.Use(cors.New())
 	r.Use(middlewares.SetContextHolder())
 	r.Use(middlewares.SetMeta())
 
