@@ -3,10 +3,13 @@ package container
 import (
 	iservice "github.com/supernova0730/ae86/internal/interfaces/service"
 	"github.com/supernova0730/ae86/internal/service"
+	"github.com/supernova0730/ae86/pkg/minio"
 	"sync"
 )
 
 type serviceContainer struct {
+	minioClient *minio.Client
+
 	bannerInit sync.Once
 	banner     iservice.IBannerService
 
@@ -15,6 +18,9 @@ type serviceContainer struct {
 
 	customerInit sync.Once
 	customer     iservice.ICustomerService
+
+	fileStorageInit sync.Once
+	fileStorage     iservice.IFileStorage
 
 	indexInit sync.Once
 	index     iservice.IIndexService
@@ -35,8 +41,8 @@ type serviceContainer struct {
 	store     iservice.IStoreService
 }
 
-func NewServiceContainer() *serviceContainer {
-	return &serviceContainer{}
+func NewServiceContainer(minioClient *minio.Client) *serviceContainer {
+	return &serviceContainer{minioClient: minioClient}
 }
 
 func (sc *serviceContainer) Banner() iservice.IBannerService {
@@ -64,6 +70,15 @@ func (sc *serviceContainer) Customer() iservice.ICustomerService {
 		}
 	})
 	return sc.customer
+}
+
+func (sc *serviceContainer) FileStorage() iservice.IFileStorage {
+	sc.fileStorageInit.Do(func() {
+		if sc.fileStorage == nil {
+			sc.fileStorage = service.NewFileStorageService(sc.minioClient)
+		}
+	})
+	return sc.fileStorage
 }
 
 func (sc *serviceContainer) Index() iservice.IIndexService {
