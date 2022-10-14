@@ -19,5 +19,6 @@ func RegisterRoutes(r fiber.Router, controller *container.ControllerContainer) {
 
 	productRouter := v1.Group("/product")
 	productRouter.Get("/search", controller.Product().Search)
+	productRouter.Get("/by_id/:id", controller.Product().ByID)
 	productRouter.Get("/by_category_id/:category_id", controller.Product().ListByCategoryID)
 }

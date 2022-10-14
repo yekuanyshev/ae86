@@ -15,6 +15,24 @@ func NewProductController(service container.IService) *ProductController {
 	return &ProductController{service: service}
 }
 
+func (ctl *ProductController) ByID(c *fiber.Ctx) error {
+	id, err := c.ParamsInt("id", 0)
+	if err != nil {
+		return c.Status(http.StatusBadRequest).JSON(fiber.Map{
+			"error": err.Error(),
+		})
+	}
+
+	result, err := ctl.service.Product().ByID(c.UserContext(), int64(id))
+	if err != nil {
+		return c.Status(http.StatusInternalServerError).JSON(fiber.Map{
+			"error": err.Error(),
+		})
+	}
+
+	return c.Status(http.StatusOK).JSON(result)
+}
+
 func (ctl *ProductController) ListByCategoryID(c *fiber.Ctx) error {
 	categoryID, err := c.ParamsInt("category_id", 0)
 	if err != nil {
