@@ -2,12 +2,11 @@ package service
 
 import (
 	"context"
-	"fmt"
 	"github.com/supernova0730/ae86/internal/logger"
 	"github.com/supernova0730/ae86/pkg/minio"
+	"github.com/supernova0730/ae86/pkg/uuid"
 	"go.uber.org/zap"
 	"path/filepath"
-	"time"
 )
 
 type FileStorageService struct {
@@ -54,11 +53,5 @@ func (s *FileStorageService) Download(ctx context.Context, filename string) (fil
 }
 
 func (s *FileStorageService) generateFilename(ext string) string {
-	t := time.Now()
-	formatted := fmt.Sprintf(
-		"%d-%02d-%02dT%02d:%02d:%02d",
-		t.Year(), t.Month(), t.Day(),
-		t.Hour(), t.Minute(), t.Second(),
-	)
-	return formatted + ext
+	return uuid.Generate() + ext
 }

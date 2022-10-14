@@ -6,6 +6,7 @@ type IService interface {
 	Banner() service.IBannerService
 	Category() service.ICategoryService
 	Customer() service.ICustomerService
+	FileStorage() service.IFileStorage
 	Index() service.IIndexService
 	Manager() service.IManagerService
 	Order() service.IOrderService

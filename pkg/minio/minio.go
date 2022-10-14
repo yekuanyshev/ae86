@@ -56,8 +56,15 @@ func (c *Client) Download(ctx context.Context, filename string) (*File, error) {
 		return nil, err
 	}
 
+	stat, err := object.Stat()
+	if err != nil {
+		return nil, err
+	}
+
 	return &File{
-		Content: object,
-		Name:    filename,
+		Content:     object,
+		Name:        filename,
+		Size:        stat.Size,
+		ContentType: stat.ContentType,
 	}, nil
 }
