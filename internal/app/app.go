@@ -35,9 +35,7 @@ func Run() {
 
 	logger.Log.Info("connected to database...")
 
-	repositoryContainer := container.NewRepositoryContainer(db)
-	serviceContainer := container.NewServiceContainer(repositoryContainer)
-	controllerContainer := container.NewControllerContainer(serviceContainer)
+	container.MContainer.SetDB(db)
 
 	transport.Start(transport.Config{
 		Rest: rest.Config{
@@ -47,7 +45,7 @@ func Run() {
 			CertFile:  conf.HTTPCertFile,
 			KeyFile:   conf.HTTPKeyFile,
 		},
-	}, controllerContainer)
+	})
 
 	logger.Log.Info("http server started...")
 

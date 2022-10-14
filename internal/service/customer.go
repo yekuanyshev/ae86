@@ -9,23 +9,23 @@ import (
 )
 
 type CustomerService struct {
-	repository container.IRepository
+	mc container.IMainContainer
 }
 
-func NewCustomerService(repository container.IRepository) *CustomerService {
-	return &CustomerService{repository: repository}
+func NewCustomerService(mc container.IMainContainer) *CustomerService {
+	return &CustomerService{mc: mc}
 }
 
 func (s *CustomerService) CheckExistence(ctx context.Context, customer model.Customer) (err error) {
-	oldCustomer, err := s.repository.Customer().ByExternalID(ctx, customer.ExternalID)
+	oldCustomer, err := s.mc.Repositories().Customer().ByExternalID(ctx, customer.ExternalID)
 	if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
 		return
 	}
 
 	if errors.Is(err, gorm.ErrRecordNotFound) {
-		_, err = s.repository.Customer().Create(ctx, customer)
+		_, err = s.mc.Repositories().Customer().Create(ctx, customer)
 		return
 	}
 
-	return s.repository.Customer().UpdateByExternalID(ctx, oldCustomer.ExternalID, customer)
+	return s.mc.Repositories().Customer().UpdateByExternalID(ctx, oldCustomer.ExternalID, customer)
 }

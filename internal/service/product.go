@@ -7,15 +7,15 @@ import (
 )
 
 type ProductService struct {
-	repository container.IRepository
+	mc container.IMainContainer
 }
 
-func NewProductService(repository container.IRepository) *ProductService {
-	return &ProductService{repository: repository}
+func NewProductService(mc container.IMainContainer) *ProductService {
+	return &ProductService{mc: mc}
 }
 
 func (service *ProductService) ByID(ctx context.Context, id int64) (view views.ProductFull, err error) {
-	product, err := service.repository.Product().ByID(ctx, id)
+	product, err := service.mc.Repositories().Product().ByID(ctx, id)
 	if err != nil {
 		return
 	}
@@ -30,7 +30,7 @@ func (service *ProductService) ByID(ctx context.Context, id int64) (view views.P
 }
 
 func (service *ProductService) ListByCategoryID(ctx context.Context, categoryID int64) (result []views.ProductShort, err error) {
-	products, err := service.repository.Product().ListActiveByCategoryID(ctx, categoryID)
+	products, err := service.mc.Repositories().Product().ListActiveByCategoryID(ctx, categoryID)
 	if err != nil {
 		return
 	}
@@ -47,7 +47,7 @@ func (service *ProductService) ListByCategoryID(ctx context.Context, categoryID 
 }
 
 func (service *ProductService) Search(ctx context.Context, storeID int64, searchText string) (view views.ProductSearchResult, err error) {
-	products, err := service.repository.Product().ListActiveByStoreIDAndSearchText(ctx, storeID, searchText)
+	products, err := service.mc.Repositories().Product().ListActiveByStoreIDAndSearchText(ctx, storeID, searchText)
 	if err != nil {
 		return
 	}

@@ -3,9 +3,9 @@ package service
 import "github.com/supernova0730/ae86/internal/interfaces/container"
 
 type OrderService struct {
-	repository container.IRepository
+	mc container.IMainContainer
 }
 
-func NewOrderService(repository container.IRepository) *OrderService {
-	return &OrderService{repository: repository}
+func NewOrderService(mc container.IMainContainer) *OrderService {
+	return &OrderService{mc: mc}
 }

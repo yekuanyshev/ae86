@@ -3,7 +3,6 @@ package rest
 import (
 	"encoding/json"
 	"github.com/gofiber/fiber/v2"
-	"github.com/supernova0730/ae86/internal/container"
 	"github.com/supernova0730/ae86/pkg/logger"
 	"go.uber.org/zap"
 	"net"
@@ -21,14 +20,14 @@ func (c Config) Address() string {
 	return net.JoinHostPort(c.Host, c.Port)
 }
 
-func Start(config Config, controller *container.ControllerContainer) {
+func Start(config Config) {
 	app := fiber.New(fiber.Config{
 		JSONEncoder:           json.Marshal,
 		JSONDecoder:           json.Unmarshal,
 		DisableStartupMessage: true,
 	})
 
-	RegisterRoutes(app, controller)
+	RegisterRoutes(app)
 
 	address := config.Address()
 

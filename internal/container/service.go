@@ -1,69 +1,121 @@
 package container
 
 import (
-	"github.com/supernova0730/ae86/internal/interfaces/container"
 	iservice "github.com/supernova0730/ae86/internal/interfaces/service"
 	"github.com/supernova0730/ae86/internal/service"
+	"sync"
 )
 
-type ServiceContainer struct {
-	banner    iservice.IBannerService
-	category  iservice.ICategoryService
-	customer  iservice.ICustomerService
+type serviceContainer struct {
+	bannerInit sync.Once
+	banner     iservice.IBannerService
+
+	categoryInit sync.Once
+	category     iservice.ICategoryService
+
+	customerInit sync.Once
+	customer     iservice.ICustomerService
+
+	indexInit sync.Once
 	index     iservice.IIndexService
-	manager   iservice.IManagerService
+
+	managerInit sync.Once
+	manager     iservice.IManagerService
+
+	orderInit sync.Once
 	order     iservice.IOrderService
-	orderItem iservice.IOrderItemService
-	product   iservice.IProductService
+
+	orderItemInit sync.Once
+	orderItem     iservice.IOrderItemService
+
+	productInit sync.Once
+	product     iservice.IProductService
+
+	storeInit sync.Once
 	store     iservice.IStoreService
 }
 
-func NewServiceContainer(repository container.IRepository) *ServiceContainer {
-	return &ServiceContainer{
-		banner:    service.NewBannerService(repository),
-		category:  service.NewCategoryService(repository),
-		customer:  service.NewCustomerService(repository),
-		index:     service.NewIndexService(repository),
-		manager:   service.NewManagerService(repository),
-		order:     service.NewOrderService(repository),
-		orderItem: service.NewOrderItemService(repository),
-		product:   service.NewProductService(repository),
-		store:     service.NewStoreService(repository),
-	}
+func NewServiceContainer() *serviceContainer {
+	return &serviceContainer{}
 }
 
-func (sc ServiceContainer) Banner() iservice.IBannerService {
+func (sc *serviceContainer) Banner() iservice.IBannerService {
+	sc.bannerInit.Do(func() {
+		if sc.banner == nil {
+			sc.banner = service.NewBannerService(MContainer)
+		}
+	})
 	return sc.banner
 }
 
-func (sc ServiceContainer) Category() iservice.ICategoryService {
+func (sc *serviceContainer) Category() iservice.ICategoryService {
+	sc.categoryInit.Do(func() {
+		if sc.category == nil {
+			sc.category = service.NewCategoryService(MContainer)
+		}
+	})
 	return sc.category
 }
 
-func (sc ServiceContainer) Customer() iservice.ICustomerService {
+func (sc *serviceContainer) Customer() iservice.ICustomerService {
+	sc.customerInit.Do(func() {
+		if sc.customer == nil {
+			sc.customer = service.NewCustomerService(MContainer)
+		}
+	})
 	return sc.customer
 }
 
-func (sc ServiceContainer) Index() iservice.IIndexService {
+func (sc *serviceContainer) Index() iservice.IIndexService {
+	sc.indexInit.Do(func() {
+		if sc.index == nil {
+			sc.index = service.NewIndexService(MContainer)
+		}
+	})
 	return sc.index
 }
 
-func (sc ServiceContainer) Manager() iservice.IManagerService {
+func (sc *serviceContainer) Manager() iservice.IManagerService {
+	sc.managerInit.Do(func() {
+		if sc.manager == nil {
+			sc.manager = service.NewManagerService(MContainer)
+		}
+	})
 	return sc.manager
 }
 
-func (sc ServiceContainer) Order() iservice.IOrderService {
+func (sc *serviceContainer) Order() iservice.IOrderService {
+	sc.orderInit.Do(func() {
+		if sc.order == nil {
+			sc.order = service.NewOrderService(MContainer)
+		}
+	})
 	return sc.order
 }
 
-func (sc ServiceContainer) OrderItem() iservice.IOrderItemService {
+func (sc *serviceContainer) OrderItem() iservice.IOrderItemService {
+	sc.orderItemInit.Do(func() {
+		if sc.orderItem == nil {
+			sc.orderItem = service.NewOrderItemService(MContainer)
+		}
+	})
 	return sc.orderItem
 }
 
-func (sc ServiceContainer) Product() iservice.IProductService {
+func (sc *serviceContainer) Product() iservice.IProductService {
+	sc.productInit.Do(func() {
+		if sc.product == nil {
+			sc.product = service.NewProductService(MContainer)
+		}
+	})
 	return sc.product
 }
 
-func (sc ServiceContainer) Store() iservice.IStoreService {
+func (sc *serviceContainer) Store() iservice.IStoreService {
+	sc.storeInit.Do(func() {
+		if sc.store == nil {
+			sc.store = service.NewStoreService(MContainer)
+		}
+	})
 	return sc.store
 }

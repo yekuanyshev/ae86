@@ -3,10 +3,13 @@ package rest
 import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/supernova0730/ae86/internal/container"
+	"github.com/supernova0730/ae86/internal/transport/rest/controllers"
 	"github.com/supernova0730/ae86/internal/transport/rest/middlewares"
 )
 
-func RegisterRoutes(r fiber.Router, controller *container.ControllerContainer) {
+func RegisterRoutes(r fiber.Router) {
+	controller := controllers.NewContainer(container.MContainer.Services())
+
 	r.Use(middlewares.SetContextHolder())
 	r.Use(middlewares.SetMeta())
 

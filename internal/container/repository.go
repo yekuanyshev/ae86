@@ -4,60 +4,109 @@ import (
 	irepository "github.com/supernova0730/ae86/internal/interfaces/repository"
 	"github.com/supernova0730/ae86/internal/repository"
 	"gorm.io/gorm"
+	"sync"
 )
 
-type RepositoryContainer struct {
-	banner    irepository.IBannerRepository
-	category  irepository.ICategoryRepository
-	customer  irepository.ICustomerRepository
-	manager   irepository.IManagerRepository
+type repositoryContainer struct {
+	db *gorm.DB
+
+	bannerInit sync.Once
+	banner     irepository.IBannerRepository
+
+	categoryInit sync.Once
+	category     irepository.ICategoryRepository
+
+	customerInit sync.Once
+	customer     irepository.ICustomerRepository
+
+	managerInit sync.Once
+	manager     irepository.IManagerRepository
+
+	orderInit sync.Once
 	order     irepository.IOrderRepository
-	orderItem irepository.IOrderItemRepository
-	product   irepository.IProductRepository
+
+	orderItemInit sync.Once
+	orderItem     irepository.IOrderItemRepository
+
+	productInit sync.Once
+	product     irepository.IProductRepository
+
+	storeInit sync.Once
 	store     irepository.IStoreRepository
 }
 
-func NewRepositoryContainer(db *gorm.DB) *RepositoryContainer {
-	return &RepositoryContainer{
-		banner:    repository.NewBannerRepository(db),
-		category:  repository.NewCategoryRepository(db),
-		customer:  repository.NewCustomerRepository(db),
-		manager:   repository.NewManagerRepository(db),
-		order:     repository.NewOrderRepository(db),
-		orderItem: repository.NewOrderItemRepository(db),
-		product:   repository.NewProductRepository(db),
-		store:     repository.NewStoreRepository(db),
-	}
+func NewRepositoryContainer(db *gorm.DB) *repositoryContainer {
+	return &repositoryContainer{db: db}
 }
 
-func (rc *RepositoryContainer) Banner() irepository.IBannerRepository {
+func (rc *repositoryContainer) Banner() irepository.IBannerRepository {
+	rc.bannerInit.Do(func() {
+		if rc.banner == nil {
+			rc.banner = repository.NewBannerRepository(rc.db)
+		}
+	})
 	return rc.banner
 }
 
-func (rc *RepositoryContainer) Category() irepository.ICategoryRepository {
+func (rc *repositoryContainer) Category() irepository.ICategoryRepository {
+	rc.categoryInit.Do(func() {
+		if rc.category == nil {
+			rc.category = repository.NewCategoryRepository(rc.db)
+		}
+	})
 	return rc.category
 }
 
-func (rc *RepositoryContainer) Customer() irepository.ICustomerRepository {
+func (rc *repositoryContainer) Customer() irepository.ICustomerRepository {
+	rc.customerInit.Do(func() {
+		if rc.customer == nil {
+			rc.customer = repository.NewCustomerRepository(rc.db)
+		}
+	})
 	return rc.customer
 }
 
-func (rc *RepositoryContainer) Manager() irepository.IManagerRepository {
+func (rc *repositoryContainer) Manager() irepository.IManagerRepository {
+	rc.managerInit.Do(func() {
+		if rc.manager == nil {
+			rc.manager = repository.NewManagerRepository(rc.db)
+		}
+	})
 	return rc.manager
 }
 
-func (rc *RepositoryContainer) Order() irepository.IOrderRepository {
+func (rc *repositoryContainer) Order() irepository.IOrderRepository {
+	rc.orderInit.Do(func() {
+		if rc.order == nil {
+			rc.order = repository.NewOrderRepository(rc.db)
+		}
+	})
 	return rc.order
 }
 
-func (rc *RepositoryContainer) OrderItem() irepository.IOrderItemRepository {
+func (rc *repositoryContainer) OrderItem() irepository.IOrderItemRepository {
+	rc.orderItemInit.Do(func() {
+		if rc.orderItem == nil {
+			rc.orderItem = repository.NewOrderItemRepository(rc.db)
+		}
+	})
 	return rc.orderItem
 }
 
-func (rc *RepositoryContainer) Product() irepository.IProductRepository {
+func (rc *repositoryContainer) Product() irepository.IProductRepository {
+	rc.productInit.Do(func() {
+		if rc.product == nil {
+			rc.product = repository.NewProductRepository(rc.db)
+		}
+	})
 	return rc.product
 }
 
-func (rc *RepositoryContainer) Store() irepository.IStoreRepository {
+func (rc *repositoryContainer) Store() irepository.IStoreRepository {
+	rc.storeInit.Do(func() {
+		if rc.store == nil {
+			rc.store = repository.NewStoreRepository(rc.db)
+		}
+	})
 	return rc.store
 }
