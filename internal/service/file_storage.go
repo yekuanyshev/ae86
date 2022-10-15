@@ -32,7 +32,7 @@ func (s *FileStorageService) Upload(ctx context.Context, file model.File) (filen
 	}()
 
 	filename = s.generateFilename(filepath.Ext(file.Name))
-	err = s.client.Upload(ctx, &minio.File{
+	err = s.client.Upload(ctx, &minio.Object{
 		Content:     bytes.NewBuffer(file.Content),
 		Name:        filename,
 		Size:        file.Size,

@@ -38,14 +38,21 @@ func Connect(ctx context.Context, config Config) (*Client, error) {
 	}, nil
 }
 
-func (c *Client) Upload(ctx context.Context, object *File) error {
-	_, err := c.minioClient.PutObject(ctx, c.bucket, object.Name, object.Content, object.Size, minio.PutObjectOptions{
-		ContentType: object.ContentType,
-	})
+func (c *Client) Upload(ctx context.Context, object *Object) error {
+	_, err := c.minioClient.PutObject(
+		ctx,
+		c.bucket,
+		object.Name,
+		object.Content,
+		object.Size,
+		minio.PutObjectOptions{
+			ContentType: object.ContentType,
+		},
+	)
 	return err
 }
 
-func (c *Client) Download(ctx context.Context, filename string) (*File, error) {
+func (c *Client) Download(ctx context.Context, filename string) (*Object, error) {
 	object, err := c.minioClient.GetObject(
 		ctx,
 		c.bucket,
@@ -61,7 +68,7 @@ func (c *Client) Download(ctx context.Context, filename string) (*File, error) {
 		return nil, err
 	}
 
-	return &File{
+	return &Object{
 		Content:     object,
 		Name:        filename,
 		Size:        stat.Size,

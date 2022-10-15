@@ -2,7 +2,7 @@ package minio
 
 import "io"
 
-type File struct {
+type Object struct {
 	Content     io.Reader
 	Name        string
 	Size        int64
