@@ -5,6 +5,8 @@ import (
 	"github.com/kelseyhightower/envconfig"
 )
 
+var Global *Config
+
 type Config struct {
 	DBHost     string `envconfig:"DB_HOST" required:"true"`
 	DBPort     string `envconfig:"DB_PORT" required:"true"`
@@ -13,6 +15,7 @@ type Config struct {
 	DBName     string `envconfig:"DB_NAME" required:"true"`
 	DBSSLMode  string `envconfig:"DB_SSLMODE" default:"disable"`
 
+	MinioEnabled  bool   `envconfig:"MINIO_ENABLED" default:"false"`
 	MinioHost     string `envconfig:"MINIO_HOST"`
 	MinioPort     string `envconfig:"MINIO_PORT"`
 	MinioUser     string `envconfig:"MINIO_USER"`
@@ -27,18 +30,18 @@ type Config struct {
 	HTTPKeyFile   string `envconfig:"HTTP_KEYFILE"`
 }
 
-func Load(envPrefix string, filenames ...string) (Config, error) {
-	config := Config{}
-
+func Load(envPrefix string, filenames ...string) error {
 	err := godotenv.Load(filenames...)
 	if err != nil {
-		return Config{}, err
+		return err
 	}
 
-	err = envconfig.Process(envPrefix, &config)
+	conf := Config{}
+	err = envconfig.Process(envPrefix, &conf)
 	if err != nil {
-		return Config{}, err
+		return err
 	}
 
-	return config, nil
+	Global = &conf
+	return nil
 }

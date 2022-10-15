@@ -1,16 +1,14 @@
 package container
 
 import (
+	"github.com/supernova0730/ae86/internal/connections"
 	"github.com/supernova0730/ae86/internal/interfaces/container"
-	"gorm.io/gorm"
 	"sync"
 )
 
 var MContainer = &mainContainer{}
 
 type mainContainer struct {
-	db *gorm.DB
-
 	servicesInit sync.Once
 	services     container.IService
 
@@ -30,12 +28,8 @@ func (mc *mainContainer) Services() container.IService {
 func (mc *mainContainer) Repositories() container.IRepository {
 	mc.repositoriesInit.Do(func() {
 		if mc.repositories == nil {
-			mc.repositories = NewRepositoryContainer(mc.db)
+			mc.repositories = NewRepositoryContainer(connections.DBConn)
 		}
 	})
 	return mc.repositories
-}
-
-func (mc *mainContainer) Init(db *gorm.DB) {
-	mc.db = db
 }

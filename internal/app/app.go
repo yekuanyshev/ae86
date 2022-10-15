@@ -1,11 +1,13 @@
 package app
 
 import (
+	"context"
 	"github.com/supernova0730/ae86/config"
-	"github.com/supernova0730/ae86/internal/container"
+	"github.com/supernova0730/ae86/internal/connections"
 	"github.com/supernova0730/ae86/internal/transport"
 	"github.com/supernova0730/ae86/internal/transport/rest"
 	"github.com/supernova0730/ae86/pkg/logger"
+	"github.com/supernova0730/ae86/pkg/minio"
 	"github.com/supernova0730/ae86/pkg/postgres"
 	"go.uber.org/zap"
 	"os"
@@ -14,20 +16,20 @@ import (
 )
 
 func Run() {
-	conf, err := config.Load("")
+	err := config.Load("")
 	if err != nil {
 		logger.Log.Fatal("failed to load config", zap.Error(err))
 	}
 
-	logger.Log.Info("config loaded", zap.Any("config", conf))
+	logger.Log.Info("config loaded", zap.Any("config", config.Global))
 
-	db, err := postgres.Connect(postgres.Config{
-		Host:     conf.DBHost,
-		Port:     conf.DBPort,
-		User:     conf.DBUser,
-		Password: conf.DBPassword,
-		Name:     conf.DBName,
-		SSLMode:  conf.DBSSLMode,
+	err = connections.DBConnect(postgres.Config{
+		Host:     config.Global.DBHost,
+		Port:     config.Global.DBPort,
+		User:     config.Global.DBUser,
+		Password: config.Global.DBPassword,
+		Name:     config.Global.DBName,
+		SSLMode:  config.Global.DBSSLMode,
 	})
 	if err != nil {
 		logger.Log.Fatal("failed to connect to database", zap.Error(err))
@@ -35,15 +37,28 @@ func Run() {
 
 	logger.Log.Info("connected to database...")
 
-	container.MContainer.Init(db)
+	if config.Global.MinioEnabled {
+		err = connections.MinioConnect(context.Background(), minio.Config{
+			Host:     config.Global.MinioHost,
+			Port:     config.Global.MinioPort,
+			User:     config.Global.MinioUser,
+			Password: config.Global.MinioPassword,
+			UseSSL:   config.Global.MinioUseSSL,
+			Bucket:   config.Global.MinioBucket,
+		})
+		if err != nil {
+			logger.Log.Fatal("failed to connect to minio", zap.Error(err))
+		}
+		logger.Log.Info("connected to minio...")
+	}
 
 	transport.Start(transport.Config{
 		Rest: rest.Config{
-			Host:      conf.HTTPHost,
-			Port:      conf.HTTPPort,
-			TLSEnable: conf.HTTPTLSEnable,
-			CertFile:  conf.HTTPCertFile,
-			KeyFile:   conf.HTTPKeyFile,
+			Host:      config.Global.HTTPHost,
+			Port:      config.Global.HTTPPort,
+			TLSEnable: config.Global.HTTPTLSEnable,
+			CertFile:  config.Global.HTTPCertFile,
+			KeyFile:   config.Global.HTTPKeyFile,
 		},
 	})
 

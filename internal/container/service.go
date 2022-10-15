@@ -1,6 +1,8 @@
 package container
 
 import (
+	"github.com/supernova0730/ae86/config"
+	"github.com/supernova0730/ae86/internal/connections"
 	iservice "github.com/supernova0730/ae86/internal/interfaces/service"
 	"github.com/supernova0730/ae86/internal/service"
 	"sync"
@@ -72,7 +74,11 @@ func (sc *serviceContainer) Customer() iservice.ICustomerService {
 func (sc *serviceContainer) FileStorage() iservice.IFileStorage {
 	sc.fileStorageInit.Do(func() {
 		if sc.fileStorage == nil {
-			sc.fileStorage = service.NewFileStorageEmulatorService(MContainer)
+			if config.Global.MinioEnabled {
+				sc.fileStorage = service.NewFileStorageService(connections.MinioConn)
+			} else {
+				sc.fileStorage = service.NewFileStorageEmulatorService(MContainer)
+			}
 		}
 	})
 	return sc.fileStorage
