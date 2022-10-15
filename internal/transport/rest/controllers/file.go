@@ -1,12 +1,11 @@
 package controllers
 
 import (
-	"bytes"
 	"errors"
 	"github.com/gofiber/fiber/v2"
 	"github.com/supernova0730/ae86/internal/interfaces/container"
+	"github.com/supernova0730/ae86/internal/model"
 	"github.com/supernova0730/ae86/internal/transport/rest/response"
-	"github.com/supernova0730/ae86/pkg/minio"
 	"io"
 	"mime/multipart"
 	"net/http"
@@ -32,7 +31,7 @@ func (ctl *FileController) Get(c *fiber.Ctx) error {
 	}
 
 	c.Set(fiber.HeaderContentType, file.ContentType)
-	return c.Status(http.StatusOK).SendStream(file.Content)
+	return c.Status(http.StatusOK).Send(file.Content)
 }
 
 func (ctl *FileController) Upload(c *fiber.Ctx) error {
@@ -84,8 +83,8 @@ func (ctl *FileController) uploadFile(c *fiber.Ctx, fileHeader *multipart.FileHe
 		return "", response.Error(c, http.StatusInternalServerError, err)
 	}
 
-	file := &minio.File{
-		Content:     bytes.NewBuffer(raw),
+	file := model.File{
+		Content:     raw,
 		Name:        fileHeader.Filename,
 		Size:        fileHeader.Size,
 		ContentType: http.DetectContentType(raw),

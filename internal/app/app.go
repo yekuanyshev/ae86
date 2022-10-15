@@ -1,13 +1,11 @@
 package app
 
 import (
-	"context"
 	"github.com/supernova0730/ae86/config"
 	"github.com/supernova0730/ae86/internal/container"
 	"github.com/supernova0730/ae86/internal/transport"
 	"github.com/supernova0730/ae86/internal/transport/rest"
 	"github.com/supernova0730/ae86/pkg/logger"
-	"github.com/supernova0730/ae86/pkg/minio"
 	"github.com/supernova0730/ae86/pkg/postgres"
 	"go.uber.org/zap"
 	"os"
@@ -16,8 +14,6 @@ import (
 )
 
 func Run() {
-	ctx := context.Background()
-
 	conf, err := config.Load("")
 	if err != nil {
 		logger.Log.Fatal("failed to load config", zap.Error(err))
@@ -39,23 +35,7 @@ func Run() {
 
 	logger.Log.Info("connected to database...")
 
-	minioConfig := minio.Config{
-		Host:     conf.MinioHost,
-		Port:     conf.MinioPort,
-		User:     conf.MinioUser,
-		Password: conf.MinioPassword,
-		UseSSL:   conf.MinioUseSSL,
-		Bucket:   conf.MinioBucket,
-	}
-
-	minioClient, err := minio.Connect(ctx, minioConfig)
-	if err != nil {
-		logger.Log.Fatal("failed to connect to file storage", zap.Error(err))
-	}
-
-	logger.Log.Info("connected to file storage...")
-
-	container.MContainer.Init(db, minioClient)
+	container.MContainer.Init(db)
 
 	transport.Start(transport.Config{
 		Rest: rest.Config{

@@ -3,13 +3,10 @@ package container
 import (
 	iservice "github.com/supernova0730/ae86/internal/interfaces/service"
 	"github.com/supernova0730/ae86/internal/service"
-	"github.com/supernova0730/ae86/pkg/minio"
 	"sync"
 )
 
 type serviceContainer struct {
-	minioClient *minio.Client
-
 	bannerInit sync.Once
 	banner     iservice.IBannerService
 
@@ -41,8 +38,8 @@ type serviceContainer struct {
 	store     iservice.IStoreService
 }
 
-func NewServiceContainer(minioClient *minio.Client) *serviceContainer {
-	return &serviceContainer{minioClient: minioClient}
+func NewServiceContainer() *serviceContainer {
+	return &serviceContainer{}
 }
 
 func (sc *serviceContainer) Banner() iservice.IBannerService {
@@ -75,7 +72,7 @@ func (sc *serviceContainer) Customer() iservice.ICustomerService {
 func (sc *serviceContainer) FileStorage() iservice.IFileStorage {
 	sc.fileStorageInit.Do(func() {
 		if sc.fileStorage == nil {
-			sc.fileStorage = service.NewFileStorageService(sc.minioClient)
+			sc.fileStorage = service.NewFileStorageEmulatorService(MContainer)
 		}
 	})
 	return sc.fileStorage

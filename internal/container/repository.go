@@ -19,6 +19,9 @@ type repositoryContainer struct {
 	customerInit sync.Once
 	customer     irepository.ICustomerRepository
 
+	fileInit sync.Once
+	file     irepository.IFileRepository
+
 	managerInit sync.Once
 	manager     irepository.IManagerRepository
 
@@ -64,6 +67,15 @@ func (rc *repositoryContainer) Customer() irepository.ICustomerRepository {
 		}
 	})
 	return rc.customer
+}
+
+func (rc *repositoryContainer) File() irepository.IFileRepository {
+	rc.fileInit.Do(func() {
+		if rc.file == nil {
+			rc.file = repository.NewFileRepository(rc.db)
+		}
+	})
+	return rc.file
 }
 
 func (rc *repositoryContainer) Manager() irepository.IManagerRepository {

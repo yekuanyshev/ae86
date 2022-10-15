@@ -13,12 +13,12 @@ type Config struct {
 	DBName     string `envconfig:"DB_NAME" required:"true"`
 	DBSSLMode  string `envconfig:"DB_SSLMODE" default:"disable"`
 
-	MinioHost     string `envconfig:"MINIO_HOST" required:"true"`
-	MinioPort     string `envconfig:"MINIO_PORT" required:"true"`
-	MinioUser     string `envconfig:"MINIO_USER" required:"true"`
-	MinioPassword string `envconfig:"MINIO_PASSWORD" required:"true"`
-	MinioUseSSL   bool   `envconfig:"MINIO_USE_SSL" default:"false"`
-	MinioBucket   string `envconfig:"MINIO_BUCKET" required:"true"`
+	MinioHost     string `envconfig:"MINIO_HOST"`
+	MinioPort     string `envconfig:"MINIO_PORT"`
+	MinioUser     string `envconfig:"MINIO_USER"`
+	MinioPassword string `envconfig:"MINIO_PASSWORD"`
+	MinioUseSSL   bool   `envconfig:"MINIO_USE_SSL"`
+	MinioBucket   string `envconfig:"MINIO_BUCKET"`
 
 	HTTPHost      string `envconfig:"HTTP_HOST" default:"localhost"`
 	HTTPPort      string `envconfig:"HTTP_PORT" default:"8080"`

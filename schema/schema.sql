@@ -50,7 +50,7 @@ CREATE TABLE IF NOT EXISTS product
 CREATE TABLE IF NOT EXISTS customer
 (
     id          SERIAL PRIMARY KEY,
-    external_id VARCHAR NOT NULL,
+    external_id VARCHAR     NOT NULL,
     username    VARCHAR,
     phone       VARCHAR,
     first_name  VARCHAR,
@@ -86,4 +86,13 @@ CREATE TABLE IF NOT EXISTS order_item
     product_id INTEGER REFERENCES product (id),
     amount     INTEGER NOT NULL DEFAULT 1,
     CONSTRAINT amount_check CHECK ( amount > 0 )
+);
+
+CREATE TABLE IF NOT EXISTS file
+(
+    id           SERIAL PRIMARY KEY,
+    name         VARCHAR UNIQUE NOT NULL,
+    content_type VARCHAR        NOT NULL,
+    size         INTEGER        NOT NULL,
+    content      BYTEA          NOT NULL
 );

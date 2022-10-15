@@ -2,7 +2,6 @@ package container
 
 import (
 	"github.com/supernova0730/ae86/internal/interfaces/container"
-	"github.com/supernova0730/ae86/pkg/minio"
 	"gorm.io/gorm"
 	"sync"
 )
@@ -10,8 +9,7 @@ import (
 var MContainer = &mainContainer{}
 
 type mainContainer struct {
-	db          *gorm.DB
-	minioClient *minio.Client
+	db *gorm.DB
 
 	servicesInit sync.Once
 	services     container.IService
@@ -23,7 +21,7 @@ type mainContainer struct {
 func (mc *mainContainer) Services() container.IService {
 	mc.servicesInit.Do(func() {
 		if mc.services == nil {
-			mc.services = NewServiceContainer(mc.minioClient)
+			mc.services = NewServiceContainer()
 		}
 	})
 	return mc.services
@@ -38,7 +36,6 @@ func (mc *mainContainer) Repositories() container.IRepository {
 	return mc.repositories
 }
 
-func (mc *mainContainer) Init(db *gorm.DB, minioClient *minio.Client) {
+func (mc *mainContainer) Init(db *gorm.DB) {
 	mc.db = db
-	mc.minioClient = minioClient
 }

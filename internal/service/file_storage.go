@@ -1,11 +1,14 @@
 package service
 
 import (
+	"bytes"
 	"context"
 	"github.com/supernova0730/ae86/internal/logger"
+	"github.com/supernova0730/ae86/internal/model"
 	"github.com/supernova0730/ae86/pkg/minio"
 	"github.com/supernova0730/ae86/pkg/uuid"
 	"go.uber.org/zap"
+	"io"
 	"path/filepath"
 )
 
@@ -17,7 +20,7 @@ func NewFileStorageService(client *minio.Client) *FileStorageService {
 	return &FileStorageService{client: client}
 }
 
-func (s *FileStorageService) Upload(ctx context.Context, file *minio.File) (filename string, err error) {
+func (s *FileStorageService) Upload(ctx context.Context, file model.File) (filename string, err error) {
 	defer func() {
 		if err != nil {
 			logger.LogWithCtx(ctx).Error(
@@ -29,8 +32,12 @@ func (s *FileStorageService) Upload(ctx context.Context, file *minio.File) (file
 	}()
 
 	filename = s.generateFilename(filepath.Ext(file.Name))
-	file.Name = filename
-	err = s.client.Upload(ctx, file)
+	err = s.client.Upload(ctx, &minio.File{
+		Content:     bytes.NewBuffer(file.Content),
+		Name:        filename,
+		Size:        file.Size,
+		ContentType: file.ContentType,
+	})
 	if err != nil {
 		return "", err
 	}
@@ -38,7 +45,7 @@ func (s *FileStorageService) Upload(ctx context.Context, file *minio.File) (file
 	return filename, nil
 }
 
-func (s *FileStorageService) Download(ctx context.Context, filename string) (file *minio.File, err error) {
+func (s *FileStorageService) Download(ctx context.Context, filename string) (file model.File, err error) {
 	defer func() {
 		if err != nil {
 			logger.LogWithCtx(ctx).Error(
@@ -49,7 +56,22 @@ func (s *FileStorageService) Download(ctx context.Context, filename string) (fil
 		}
 	}()
 
-	return s.client.Download(ctx, filename)
+	minioObject, err := s.client.Download(ctx, filename)
+	if err != nil {
+		return
+	}
+
+	objectContent, err := io.ReadAll(minioObject.Content)
+	if err != nil {
+		return
+	}
+
+	return model.File{
+		Name:        minioObject.Name,
+		ContentType: minioObject.ContentType,
+		Size:        minioObject.Size,
+		Content:     objectContent,
+	}, nil
 }
 
 func (s *FileStorageService) generateFilename(ext string) string {
