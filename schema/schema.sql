@@ -52,7 +52,6 @@ CREATE TABLE IF NOT EXISTS customer
     id          SERIAL PRIMARY KEY,
     external_id VARCHAR     NOT NULL,
     username    VARCHAR,
-    phone       VARCHAR,
     first_name  VARCHAR,
     last_name   VARCHAR,
     created_at  TIMESTAMPTZ NOT NULL DEFAULT now()

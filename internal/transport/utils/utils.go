@@ -26,3 +26,7 @@ func GetMeta(ctx context.Context) Meta {
 		LanguageCode: contextHolder.GetAttributeString(ctx, AttributeCustomerLanguageCode),
 	}
 }
+
+func GetCustomerID(ctx context.Context) int64 {
+	return contextHolder.GetAttributeInt64(ctx, AttributeCustomerID)
+}

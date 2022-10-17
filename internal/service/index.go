@@ -15,8 +15,6 @@ func NewIndexService(mc container.IMainContainer) *IndexService {
 }
 
 func (service *IndexService) Get(ctx context.Context, storeID int64) (view views.Index, err error) {
-	// todo: check customer existence
-
 	store, err := service.mc.Repositories().Store().ByID(ctx, storeID)
 	if err != nil {
 		return

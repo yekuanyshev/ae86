@@ -6,5 +6,5 @@ import (
 )
 
 type ICustomerService interface {
-	CheckExistence(ctx context.Context, customer model.Customer) (err error)
+	CheckExistence(ctx context.Context, customer model.Customer) (id int64, err error)
 }
