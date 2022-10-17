@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"github.com/supernova0730/ae86/internal/dto"
+	"github.com/supernova0730/ae86/internal/enums"
 	"github.com/supernova0730/ae86/internal/interfaces/container"
 	"github.com/supernova0730/ae86/internal/logger"
 	"github.com/supernova0730/ae86/internal/model"
@@ -42,7 +43,7 @@ func (s *OrderService) Create(ctx context.Context, customerID int64, storeID int
 		AllergiesInfo:         orderCreateDTO.AllergiesInfo,
 		CancellationReason:    orderCreateDTO.CancellationReason,
 		NeedKitchenAppliances: orderCreateDTO.NeedKitchenAppliances,
-		State:                 "PENDING",
+		State:                 enums.OrderStatePending,
 		PaymentMethod:         orderCreateDTO.PaymentMethod,
 		DeliveryMethod:        orderCreateDTO.DeliveryMethod,
 	})
