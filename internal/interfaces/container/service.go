@@ -10,7 +10,6 @@ type IService interface {
 	Index() service.IIndexService
 	Manager() service.IManagerService
 	Order() service.IOrderService
-	OrderItem() service.IOrderItemService
 	Product() service.IProductService
 	Store() service.IStoreService
 }

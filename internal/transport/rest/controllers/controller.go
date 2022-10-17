@@ -5,30 +5,28 @@ import (
 )
 
 type controllerContainer struct {
-	banner    *BannerController
-	category  *CategoryController
-	customer  *CustomerController
-	file      *FileController
-	index     *IndexController
-	manager   *ManagerController
-	order     *OrderController
-	orderItem *OrderItemController
-	product   *ProductController
-	store     *StoreController
+	banner   *BannerController
+	category *CategoryController
+	customer *CustomerController
+	file     *FileController
+	index    *IndexController
+	manager  *ManagerController
+	order    *OrderController
+	product  *ProductController
+	store    *StoreController
 }
 
 func NewContainer(service container.IService) *controllerContainer {
 	return &controllerContainer{
-		banner:    NewBannerController(service),
-		category:  NewCategoryController(service),
-		customer:  NewCustomerController(service),
-		file:      NewFileController(service),
-		index:     NewIndexController(service),
-		manager:   NewManagerController(service),
-		order:     NewOrderController(service),
-		orderItem: NewOrderItemController(service),
-		product:   NewProductController(service),
-		store:     NewStoreController(service),
+		banner:   NewBannerController(service),
+		category: NewCategoryController(service),
+		customer: NewCustomerController(service),
+		file:     NewFileController(service),
+		index:    NewIndexController(service),
+		manager:  NewManagerController(service),
+		order:    NewOrderController(service),
+		product:  NewProductController(service),
+		store:    NewStoreController(service),
 	}
 }
 
@@ -58,10 +56,6 @@ func (cc *controllerContainer) Manager() *ManagerController {
 
 func (cc *controllerContainer) Order() *OrderController {
 	return cc.order
-}
-
-func (cc *controllerContainer) OrderItem() *OrderItemController {
-	return cc.orderItem
 }
 
 func (cc *controllerContainer) Product() *ProductController {

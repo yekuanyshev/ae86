@@ -30,9 +30,6 @@ type serviceContainer struct {
 	orderInit sync.Once
 	order     iservice.IOrderService
 
-	orderItemInit sync.Once
-	orderItem     iservice.IOrderItemService
-
 	productInit sync.Once
 	product     iservice.IProductService
 
@@ -109,15 +106,6 @@ func (sc *serviceContainer) Order() iservice.IOrderService {
 		}
 	})
 	return sc.order
-}
-
-func (sc *serviceContainer) OrderItem() iservice.IOrderItemService {
-	sc.orderItemInit.Do(func() {
-		if sc.orderItem == nil {
-			sc.orderItem = service.NewOrderItemService(MContainer)
-		}
-	})
-	return sc.orderItem
 }
 
 func (sc *serviceContainer) Product() iservice.IProductService {
