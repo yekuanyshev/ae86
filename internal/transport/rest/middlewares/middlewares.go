@@ -9,6 +9,7 @@ import (
 	"github.com/supernova0730/ae86/pkg/uuid"
 	"go.uber.org/zap"
 	"net/http"
+	"time"
 )
 
 func SetContextHolder() fiber.Handler {
@@ -44,5 +45,32 @@ func Recover() fiber.Handler {
 			}
 		}()
 		return c.Next()
+	}
+}
+
+func SetLogger() fiber.Handler {
+	return func(c *fiber.Ctx) error {
+		started := time.Now()
+		err := c.Next()
+		status := c.Response().StatusCode()
+		log := logger.LogWithCtx(c.UserContext())
+		message := "[FIBER]"
+		fields := []zap.Field{
+			zap.String("method", c.Method()),
+			zap.String("path", c.OriginalURL()),
+			zap.Int("status", c.Response().StatusCode()),
+			zap.Duration("latency", time.Since(started)),
+			zap.Error(err),
+		}
+
+		switch {
+		case status >= 400 && status < 500:
+			log.Warn(message, fields...)
+		case status >= 500:
+			log.Error(message, fields...)
+		default:
+			log.Info(message, fields...)
+		}
+		return err
 	}
 }

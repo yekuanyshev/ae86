@@ -13,6 +13,7 @@ func RegisterRoutes(r fiber.Router) {
 
 	r.Use(middlewares.Recover())
 	r.Use(cors.New())
+	r.Use(middlewares.SetLogger())
 	r.Use(middlewares.SetContextHolder())
 	r.Use(middlewares.SetMeta())
 
