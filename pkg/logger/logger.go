@@ -9,24 +9,48 @@ import (
 
 type ExtractContextFunc func(ctx context.Context) (key string, value interface{})
 
-var (
-	Log *zap.Logger
-)
+var Log *zap.Logger
 
-func LogCtx(ctx context.Context, f ExtractContextFunc) *zap.Logger {
+func Init(isProduction bool, isJSON bool) {
+	Log = initLogger(isProduction, isJSON)
+}
+
+func WithContext(ctx context.Context, f ExtractContextFunc) *zap.Logger {
 	return Log.With(zap.Any(f(ctx)))
 }
 
-func Init() {
-	encoder := getEncoder()
-	writeSyncer := zapcore.AddSync(os.Stdout)
-	core := zapcore.NewCore(encoder, writeSyncer, zapcore.DebugLevel)
-	Log = zap.New(core)
+func initLogger(isProduction bool, isJSON bool) *zap.Logger {
+	writer := zapcore.Lock(os.Stdout)
+	encoder := getEncoder(isProduction, isJSON)
+	core := zapcore.NewCore(encoder, writer, zapcore.DebugLevel)
+	return zap.New(core)
 }
 
-func getEncoder() zapcore.Encoder {
-	encoderConfig := zap.NewProductionEncoderConfig()
-	encoderConfig.EncodeTime = zapcore.TimeEncoderOfLayout("2006-01-02 15:04:05")
-	encoderConfig.EncodeLevel = zapcore.CapitalColorLevelEncoder
+func getEncoder(isProduction bool, isJSON bool) zapcore.Encoder {
+	encoderConfig := getEncoderConfig(isProduction)
+	encoderConfig.EncodeLevel = getLevelEncoding(isJSON)
+	encoderConfig.EncodeTime = zapcore.ISO8601TimeEncoder
+	encoderConfig.TimeKey = "time"
+	encoderConfig.LevelKey = "level"
+	encoderConfig.MessageKey = "message"
+
+	if isJSON {
+		return zapcore.NewJSONEncoder(encoderConfig)
+	}
+
 	return zapcore.NewConsoleEncoder(encoderConfig)
+}
+
+func getEncoderConfig(isProduction bool) zapcore.EncoderConfig {
+	if isProduction {
+		return zap.NewProductionEncoderConfig()
+	}
+	return zap.NewDevelopmentEncoderConfig()
+}
+
+func getLevelEncoding(isJSON bool) zapcore.LevelEncoder {
+	if isJSON {
+		return zapcore.LowercaseLevelEncoder
+	}
+	return zapcore.LowercaseColorLevelEncoder
 }

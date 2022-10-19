@@ -8,7 +8,7 @@ import (
 )
 
 func LogWithCtx(ctx context.Context) *zap.Logger {
-	return logger.LogCtx(ctx, extractMetaFromCtx)
+	return logger.WithContext(ctx, extractMetaFromCtx)
 }
 
 func extractMetaFromCtx(ctx context.Context) (key string, value interface{}) {

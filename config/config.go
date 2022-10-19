@@ -1,8 +1,10 @@
 package config
 
 import (
+	"errors"
 	"github.com/joho/godotenv"
 	"github.com/kelseyhightower/envconfig"
+	"os"
 )
 
 var Global *Config
@@ -32,7 +34,7 @@ type Config struct {
 
 func Load(envPrefix string, filenames ...string) error {
 	err := godotenv.Load(filenames...)
-	if err != nil {
+	if err != nil && !errors.Is(err, os.ErrNotExist) {
 		return err
 	}
 
