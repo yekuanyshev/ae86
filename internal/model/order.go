@@ -4,9 +4,11 @@ import "time"
 
 type Order struct {
 	ID                    int64     `gorm:"column:id"`
-	CustomerID            int64     `gorm:"column:customer_id"`
+	CustomerID            string    `gorm:"column:customer_id"`
 	StoreID               int64     `gorm:"column:store_id"`
 	Address               string    `gorm:"column:address"`
+	Phone                 string    `gorm:"column:phone"`
+	Name                  string    `gorm:"column:name"`
 	Comment               string    `gorm:"column:comment"`
 	AllergiesInfo         string    `gorm:"column:allergies_info"`
 	CancellationReason    string    `gorm:"column:cancellation_reason"`

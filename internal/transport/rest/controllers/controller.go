@@ -7,7 +7,6 @@ import (
 type controllerContainer struct {
 	banner   *BannerController
 	category *CategoryController
-	customer *CustomerController
 	file     *FileController
 	index    *IndexController
 	manager  *ManagerController
@@ -20,7 +19,6 @@ func NewContainer(service container.IService) *controllerContainer {
 	return &controllerContainer{
 		banner:   NewBannerController(service),
 		category: NewCategoryController(service),
-		customer: NewCustomerController(service),
 		file:     NewFileController(service),
 		index:    NewIndexController(service),
 		manager:  NewManagerController(service),
@@ -36,10 +34,6 @@ func (cc *controllerContainer) Banner() *BannerController {
 
 func (cc *controllerContainer) Category() *CategoryController {
 	return cc.category
-}
-
-func (cc *controllerContainer) Customer() *CustomerController {
-	return cc.customer
 }
 
 func (cc *controllerContainer) File() *FileController {

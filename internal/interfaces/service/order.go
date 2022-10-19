@@ -6,5 +6,5 @@ import (
 )
 
 type IOrderService interface {
-	Create(ctx context.Context, customerID int64, storeID int64, orderCreateDTO dto.OrderCreateDTO) (id int64, err error)
+	Create(ctx context.Context, customerID string, storeID int64, orderCreateDTO dto.OrderCreateDTO) (id int64, err error)
 }

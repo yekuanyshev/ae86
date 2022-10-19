@@ -19,7 +19,7 @@ func NewOrderService(mc container.IMainContainer) *OrderService {
 	return &OrderService{mc: mc}
 }
 
-func (s *OrderService) Create(ctx context.Context, customerID int64, storeID int64, orderCreateDTO dto.OrderCreateDTO) (id int64, err error) {
+func (s *OrderService) Create(ctx context.Context, customerID string, storeID int64, orderCreateDTO dto.OrderCreateDTO) (id int64, err error) {
 	defer func() {
 		if err != nil {
 			logger.LogWithCtx(ctx).Error(

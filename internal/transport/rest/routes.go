@@ -15,7 +15,6 @@ func RegisterRoutes(r fiber.Router) {
 	r.Use(cors.New())
 	r.Use(middlewares.SetContextHolder())
 	r.Use(middlewares.SetMeta())
-	r.Use(middlewares.CheckCustomer(container.MContainer))
 
 	v1 := r.Group("/api/v1")
 	v1.Get("/ping", func(c *fiber.Ctx) error {

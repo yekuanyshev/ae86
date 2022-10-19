@@ -15,9 +15,6 @@ type serviceContainer struct {
 	categoryInit sync.Once
 	category     iservice.ICategoryService
 
-	customerInit sync.Once
-	customer     iservice.ICustomerService
-
 	fileStorageInit sync.Once
 	fileStorage     iservice.IFileStorage
 
@@ -57,15 +54,6 @@ func (sc *serviceContainer) Category() iservice.ICategoryService {
 		}
 	})
 	return sc.category
-}
-
-func (sc *serviceContainer) Customer() iservice.ICustomerService {
-	sc.customerInit.Do(func() {
-		if sc.customer == nil {
-			sc.customer = service.NewCustomerService(MContainer)
-		}
-	})
-	return sc.customer
 }
 
 func (sc *serviceContainer) FileStorage() iservice.IFileStorage {

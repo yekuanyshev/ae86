@@ -16,9 +16,6 @@ type repositoryContainer struct {
 	categoryInit sync.Once
 	category     irepository.ICategoryRepository
 
-	customerInit sync.Once
-	customer     irepository.ICustomerRepository
-
 	fileInit sync.Once
 	file     irepository.IFileRepository
 
@@ -58,15 +55,6 @@ func (rc *repositoryContainer) Category() irepository.ICategoryRepository {
 		}
 	})
 	return rc.category
-}
-
-func (rc *repositoryContainer) Customer() irepository.ICustomerRepository {
-	rc.customerInit.Do(func() {
-		if rc.customer == nil {
-			rc.customer = repository.NewCustomerRepository(rc.db)
-		}
-	})
-	return rc.customer
 }
 
 func (rc *repositoryContainer) File() irepository.IFileRepository {

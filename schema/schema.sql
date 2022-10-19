@@ -47,16 +47,6 @@ CREATE TABLE IF NOT EXISTS product
     CONSTRAINT price_check CHECK ( price > 0 )
 );
 
-CREATE TABLE IF NOT EXISTS customer
-(
-    id          SERIAL PRIMARY KEY,
-    external_id VARCHAR     NOT NULL,
-    username    VARCHAR,
-    first_name  VARCHAR,
-    last_name   VARCHAR,
-    created_at  TIMESTAMPTZ NOT NULL DEFAULT now()
-);
-
 CREATE TYPE order_payment_method AS ENUM ('CASH', 'CARD');
 CREATE TYPE order_state AS ENUM ('PENDING', 'CANCELED', 'ACCEPTED', 'DELIVERY_IN_PROGRESS', 'DELIVERED');
 CREATE TYPE order_delivery_method AS ENUM ('BY_COURIER', 'TAKEAWAY');
@@ -64,9 +54,11 @@ CREATE TYPE order_delivery_method AS ENUM ('BY_COURIER', 'TAKEAWAY');
 CREATE TABLE IF NOT EXISTS orders
 (
     id                      SERIAL PRIMARY KEY,
-    customer_id             INTEGER REFERENCES customer (id),
+    customer_id             VARCHAR               NOT NULL,
     store_id                INTEGER REFERENCES store (id),
     address                 VARCHAR               NOT NULL,
+    phone                   VARCHAR               NOT NULL,
+    name                    VARCHAR               NOT NULL,
     comment                 TEXT,
     allergies_info          TEXT,
     cancellation_reason     TEXT,
