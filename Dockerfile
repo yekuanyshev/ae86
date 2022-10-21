@@ -19,7 +19,7 @@ WORKDIR /
 
 COPY --from=build /ae86 /ae86
 
-EXPOSE 8080
+EXPOSE 8000
 
 USER nonroot:nonroot
 

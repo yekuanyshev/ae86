@@ -26,7 +26,7 @@ type Config struct {
 	MinioBucket   string `envconfig:"MINIO_BUCKET"`
 
 	HTTPHost      string `envconfig:"HTTP_HOST" default:"localhost"`
-	HTTPPort      string `envconfig:"HTTP_PORT" default:"8080"`
+	HTTPPort      string `envconfig:"HTTP_PORT" default:"8000"`
 	HTTPTLSEnable bool   `envconfig:"HTTP_TLS_ENABLE" default:"false"`
 	HTTPCertFile  string `envconfig:"HTTP_CERTFILE"`
 	HTTPKeyFile   string `envconfig:"HTTP_KEYFILE"`
