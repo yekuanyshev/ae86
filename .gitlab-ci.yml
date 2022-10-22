@@ -24,8 +24,8 @@ deploy:
         - chmod 400 $SSH_KEY
     script:
         - ssh -o StrictHostKeyChecking=no -i $SSH_KEY ubuntu@91.201.215.23 "
-            sudo docker ps -aq | xargs docker stop | xargs docker rm &&  
-            sudo docker run -dp 80:8000 $IMAGE_NAME" 
+            echo $USER_PASS sudo -S docker ps -aq | xargs docker stop | xargs docker rm &&  
+            echo $USER_PASS sudo -S sudo docker run -dp 80:8000 $IMAGE_NAME" 
             # echo $REGISTRY_PASS | docker login -u $REGISTRY_USER --password-stdin &&
 
 
