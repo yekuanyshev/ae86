@@ -1,0 +1,4 @@
+run_tests:
+    image: golang
+    script:
+        - go test
