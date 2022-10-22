@@ -29,6 +29,7 @@ deploy:
     stage: deploy
     before_script:
         - chmod 400 $SSH_KEY
+        - chmod 666 /var/run/docker.sock
     script:
         - ssh -o StrictHostKeyChecking=no -i $SSH_KEY ubuntu@91.201.215.23 "
             echo $REGISTRY_PASS | docker login -u $REGISTRY_USER --password-stdin &&
