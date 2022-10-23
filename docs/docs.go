@@ -120,6 +120,13 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "integer",
+                        "description": "Store ID",
+                        "name": "X-Store-Id",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
                         "description": "category_id",
                         "name": "category_id",
                         "in": "path",
@@ -162,6 +169,13 @@ const docTemplate = `{
                 ],
                 "summary": "get product",
                 "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Store ID",
+                        "name": "X-Store-Id",
+                        "in": "header",
+                        "required": true
+                    },
                     {
                         "type": "integer",
                         "description": "id",

@@ -167,6 +167,11 @@ paths:
     get:
       description: get products by category id
       parameters:
+      - description: Store ID
+        in: header
+        name: X-Store-Id
+        required: true
+        type: integer
       - description: category_id
         in: path
         name: category_id
@@ -196,6 +201,11 @@ paths:
     get:
       description: get product by id
       parameters:
+      - description: Store ID
+        in: header
+        name: X-Store-Id
+        required: true
+        type: integer
       - description: id
         in: path
         name: id

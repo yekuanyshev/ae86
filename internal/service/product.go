@@ -14,8 +14,8 @@ func NewProductService(mc container.IMainContainer) *ProductService {
 	return &ProductService{mc: mc}
 }
 
-func (service *ProductService) ByID(ctx context.Context, id int64) (view views.ProductFull, err error) {
-	product, err := service.mc.Repositories().Product().ByID(ctx, id)
+func (service *ProductService) ByID(ctx context.Context, storeID int64, id int64) (view views.ProductFull, err error) {
+	product, err := service.mc.Repositories().Product().ActiveProductByIDAndStoreID(ctx, id, storeID)
 	if err != nil {
 		return
 	}
@@ -29,8 +29,8 @@ func (service *ProductService) ByID(ctx context.Context, id int64) (view views.P
 	}, nil
 }
 
-func (service *ProductService) ListByCategoryID(ctx context.Context, categoryID int64) (result []views.ProductShort, err error) {
-	products, err := service.mc.Repositories().Product().ListActiveByCategoryID(ctx, categoryID)
+func (service *ProductService) ListByCategoryID(ctx context.Context, storeID int64, categoryID int64) (result []views.ProductShort, err error) {
+	products, err := service.mc.Repositories().Product().ListActiveByCategoryIDAndStoreID(ctx, categoryID, storeID)
 	if err != nil {
 		return
 	}

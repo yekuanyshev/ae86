@@ -21,18 +21,21 @@ func NewProductController(service container.IService) *ProductController {
 // @Description get product by id
 // @Tags product
 // @Produce json
+// @Param X-Store-Id header int true "Store ID"
 // @Param id path int true "id"
 // @Success 200 {object} views.ProductFull
 // @Failure 400 {object} response.ErrorResponse
 // @Failure 500 {object} response.ErrorResponse
 // @Router /product/by_id/:id [get]
 func (ctl *ProductController) ByID(c *fiber.Ctx) error {
+	storeID := utils.GetMeta(c.UserContext()).StoreID
+
 	id, err := c.ParamsInt("id", 0)
 	if err != nil {
 		return response.Error(c, http.StatusBadRequest, err)
 	}
 
-	result, err := ctl.service.Product().ByID(c.UserContext(), int64(id))
+	result, err := ctl.service.Product().ByID(c.UserContext(), storeID, int64(id))
 	if err != nil {
 		return response.Error(c, http.StatusInternalServerError, err)
 	}
@@ -45,18 +48,21 @@ func (ctl *ProductController) ByID(c *fiber.Ctx) error {
 // @Description get products by category id
 // @Tags product
 // @Produce json
+// @Param X-Store-Id header int true "Store ID"
 // @Param category_id path int true "category_id"
 // @Success 200 {object} []views.ProductShort
 // @Failure 400 {object} response.ErrorResponse
 // @Failure 500 {object} response.ErrorResponse
 // @Router /product/by_category_id/:category_id [get]
 func (ctl *ProductController) ListByCategoryID(c *fiber.Ctx) error {
+	storeID := utils.GetMeta(c.UserContext()).StoreID
+
 	categoryID, err := c.ParamsInt("category_id", 0)
 	if err != nil {
 		return response.Error(c, http.StatusBadRequest, err)
 	}
 
-	result, err := ctl.service.Product().ListByCategoryID(c.UserContext(), int64(categoryID))
+	result, err := ctl.service.Product().ListByCategoryID(c.UserContext(), storeID, int64(categoryID))
 	if err != nil {
 		return response.Error(c, http.StatusInternalServerError, err)
 	}
