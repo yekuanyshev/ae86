@@ -1,5 +1,6 @@
 variables:
     IMAGE_NAME: supernova0730/ae86
+    CONTAINER: ae86
 
 stages:
     - build
@@ -23,21 +24,17 @@ deploy:
     before_script:
         - chmod 400 $SSH_KEY
     script:
-        - ssh -o StrictHostKeyChecking=no -i $SSH_KEY ubuntu@91.201.215.23 "
-            sudo docker rm -f ae86 || true &&
+        - ssh -o StrictHostKeyChecking=no -i $SSH_KEY $SSH_USER@$SSH_HOST "
+            sudo docker rm -f $CONTAINER || true &&
             sudo docker image rm $IMAGE_NAME || true &&
-            sudo docker run --name=ae86 -dp 80:8000 
-            -e DB_HOST=172.17.0.1 
-            -e DB_PORT=5432 
-            -e DB_USER=dovakhin 
-            -e DB_PASSWORD=yR25t2njlFcYMbWu 
-            -e DB_NAME=jyldam 
+            sudo docker run --name=$CONTAINER -dp 80:8000 
+            -e DB_HOST=$DB_HOST 
+            -e DB_PORT=$DB_PORT 
+            -e DB_USER=$DB_USER 
+            -e DB_PASSWORD=$DB_PASSWORD 
+            -e DB_NAME=$DB_NAME 
             -e HTTP_HOST=0.0.0.0 
             $IMAGE_NAME"
-            
-            # sudo docker ps -aq | xargs sudo docker stop | xargs sudo docker rm &&  
-            # sudo docker run -dp 80:8000 $IMAGE_NAME" 
-            # echo $REGISTRY_PASS | docker login -u $REGISTRY_USER --password-stdin &&
 
 
 
