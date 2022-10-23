@@ -19,7 +19,7 @@ func RegisterRoutes(r fiber.Router) {
 
 	v1 := r.Group("/api/v1")
 	v1.Get("/ping", func(c *fiber.Ctx) error {
-		return c.JSON("PONG")
+		return c.JSON("pong")
 	})
 
 	v1.Get("/index", controller.Index().Get)
