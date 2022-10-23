@@ -14,7 +14,7 @@ type Order struct {
 	CancellationReason    string    `gorm:"column:cancellation_reason"`
 	NeedKitchenAppliances bool      `gorm:"column:need_kitchen_appliances"`
 	State                 string    `gorm:"column:state"`
-	PaymentMethod         string    `gorm:"column:payment_state"`
+	PaymentMethod         string    `gorm:"column:payment_method"`
 	DeliveryMethod        string    `gorm:"column:delivery_method"`
 	CreatedAt             time.Time `gorm:"column:created_at"`
 	UpdatedAt             time.Time `gorm:"column:updated_at"`
