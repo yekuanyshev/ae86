@@ -3,13 +3,18 @@ package rest
 import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
+	"github.com/gofiber/swagger"
 	"github.com/supernova0730/ae86/internal/container"
 	"github.com/supernova0730/ae86/internal/transport/rest/controllers"
 	"github.com/supernova0730/ae86/internal/transport/rest/middlewares"
+
+	_ "github.com/supernova0730/ae86/docs"
 )
 
 func RegisterRoutes(r fiber.Router) {
 	controller := controllers.NewContainer(container.MContainer.Services())
+
+	r.Get("/swagger/*", swagger.HandlerDefault)
 
 	r.Use(middlewares.Recover())
 	r.Use(cors.New())

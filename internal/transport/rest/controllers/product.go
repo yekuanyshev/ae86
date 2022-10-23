@@ -16,6 +16,16 @@ func NewProductController(service container.IService) *ProductController {
 	return &ProductController{service: service}
 }
 
+// ByID godoc
+// @Summary get product
+// @Description get product by id
+// @Tags product
+// @Produce json
+// @Param id path int true "id"
+// @Success 200 {object} views.ProductFull
+// @Failure 400 {object} response.ErrorResponse
+// @Failure 500 {object} response.ErrorResponse
+// @Router /product/by_id/:id [get]
 func (ctl *ProductController) ByID(c *fiber.Ctx) error {
 	id, err := c.ParamsInt("id", 0)
 	if err != nil {
@@ -30,6 +40,16 @@ func (ctl *ProductController) ByID(c *fiber.Ctx) error {
 	return c.Status(http.StatusOK).JSON(result)
 }
 
+// ListByCategoryID godoc
+// @Summary get products of category
+// @Description get products by category id
+// @Tags product
+// @Produce json
+// @Param category_id path int true "category_id"
+// @Success 200 {object} []views.ProductShort
+// @Failure 400 {object} response.ErrorResponse
+// @Failure 500 {object} response.ErrorResponse
+// @Router /product/by_category_id/:category_id [get]
 func (ctl *ProductController) ListByCategoryID(c *fiber.Ctx) error {
 	categoryID, err := c.ParamsInt("category_id", 0)
 	if err != nil {
@@ -44,6 +64,16 @@ func (ctl *ProductController) ListByCategoryID(c *fiber.Ctx) error {
 	return c.Status(http.StatusOK).JSON(result)
 }
 
+// Search godoc
+// @Summary search products
+// @Description search products by text
+// @Tags product
+// @Produce json
+// @Param X-Store-Id header int true "Store ID"
+// @Param text query string true "text"
+// @Success 200 {object} views.ProductSearchResult
+// @Failure 500 {object} response.ErrorResponse
+// @Router /product/search [get]
 func (ctl *ProductController) Search(c *fiber.Ctx) error {
 	storeID := utils.GetMeta(c.UserContext()).StoreID
 	searchText := c.Query("text")

@@ -16,6 +16,14 @@ func NewIndexController(service container.IService) *IndexController {
 	return &IndexController{service: service}
 }
 
+// Get godoc
+// @Summary index router
+// @Description get index data
+// @Produce json
+// @Param X-Store-Id header int true "Store ID"
+// @Success 200 {object} views.Index
+// @Failure 500 {object} response.ErrorResponse
+// @Router /index [get]
 func (ctl *IndexController) Get(c *fiber.Ctx) error {
 	storeID := utils.GetMeta(c.UserContext()).StoreID
 	result, err := ctl.service.Index().Get(c.UserContext(), storeID)

@@ -18,6 +18,18 @@ func NewOrderController(service container.IService) *OrderController {
 	return &OrderController{service: service}
 }
 
+// Create godoc
+// @Summary create order
+// @Description create order
+// @Tags order
+// @Produce json
+// @Param X-Store-Id header int true "Store ID"
+// @Param X-Customer-Id header int true "Customer ID"
+// @Param order body dto.OrderCreateDTO true "body"
+// @Success 200 {object} views.OrderCreate
+// @Failure 400 {object} response.ErrorResponse
+// @Failure 500 {object} response.ErrorResponse
+// @Router /order [post]
 func (ctl *OrderController) Create(c *fiber.Ctx) error {
 	var orderCreateDTO dto.OrderCreateDTO
 

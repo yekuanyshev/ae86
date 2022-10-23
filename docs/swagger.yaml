@@ -1,0 +1,250 @@
+basePath: /api/v1
+definitions:
+  dto.OrderCreateDTO:
+    properties:
+      address:
+        type: string
+      allergiesInfo:
+        type: string
+      cancellationReason:
+        type: string
+      comment:
+        type: string
+      deliveryMethod:
+        description: BY_COURIER, TAKEAWAY
+        type: string
+      items:
+        items:
+          $ref: '#/definitions/dto.OrderItemCreateDTO'
+        type: array
+      name:
+        type: string
+      needKitchenAppliances:
+        type: boolean
+      paymentMethod:
+        description: CASH, CARD
+        type: string
+      phone:
+        type: string
+    type: object
+  dto.OrderItemCreateDTO:
+    properties:
+      amount:
+        type: integer
+      productID:
+        type: integer
+    type: object
+  response.ErrorResponse:
+    properties:
+      error:
+        type: string
+    type: object
+  views.Category:
+    properties:
+      id:
+        type: integer
+      image:
+        type: string
+      title:
+        type: string
+    type: object
+  views.Index:
+    properties:
+      banners:
+        items:
+          type: string
+        type: array
+      categories:
+        items:
+          $ref: '#/definitions/views.Category'
+        type: array
+      storeTitle:
+        type: string
+    type: object
+  views.OrderCreate:
+    properties:
+      id:
+        type: integer
+    type: object
+  views.ProductFull:
+    properties:
+      description:
+        type: string
+      id:
+        type: integer
+      image:
+        type: string
+      price:
+        type: integer
+      title:
+        type: string
+    type: object
+  views.ProductSearchResult:
+    properties:
+      products:
+        items:
+          $ref: '#/definitions/views.ProductShort'
+        type: array
+    type: object
+  views.ProductShort:
+    properties:
+      id:
+        type: integer
+      image:
+        type: string
+      price:
+        type: integer
+      title:
+        type: string
+    type: object
+info:
+  contact:
+    name: Yeldar Kuanyshev
+  description: Delivery Service App
+  title: AE86
+  version: "1.0"
+paths:
+  /index:
+    get:
+      description: get index data
+      parameters:
+      - description: Store ID
+        in: header
+        name: X-Store-Id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/views.Index'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+      summary: index router
+  /order:
+    post:
+      description: create order
+      parameters:
+      - description: Store ID
+        in: header
+        name: X-Store-Id
+        required: true
+        type: integer
+      - description: Customer ID
+        in: header
+        name: X-Customer-Id
+        required: true
+        type: integer
+      - description: body
+        in: body
+        name: order
+        required: true
+        schema:
+          $ref: '#/definitions/dto.OrderCreateDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/views.OrderCreate'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+      summary: create order
+      tags:
+      - order
+  /product/by_category_id/:category_id:
+    get:
+      description: get products by category id
+      parameters:
+      - description: category_id
+        in: path
+        name: category_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/views.ProductShort'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+      summary: get products of category
+      tags:
+      - product
+  /product/by_id/:id:
+    get:
+      description: get product by id
+      parameters:
+      - description: id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/views.ProductFull'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+      summary: get product
+      tags:
+      - product
+  /product/search:
+    get:
+      description: search products by text
+      parameters:
+      - description: Store ID
+        in: header
+        name: X-Store-Id
+        required: true
+        type: integer
+      - description: text
+        in: query
+        name: text
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/views.ProductSearchResult'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.ErrorResponse'
+      summary: search products
+      tags:
+      - product
+swagger: "2.0"

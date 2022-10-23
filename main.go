@@ -20,6 +20,14 @@ const bannerTemplate = `
 
 var isProduction = flag.Bool("production", false, "is production")
 
+// @title       AE86
+// @version     1.0
+// @description Delivery Service App
+
+// @contact.name   Yeldar Kuanyshev
+// @contract.email kuanysheveldar123@gmail.com
+
+// @BasePath /api/v1
 func main() {
 	flag.Parse()
 	banner.Default(bannerTemplate, map[string]interface{}{
