@@ -4,7 +4,6 @@ import (
 	"context"
 	"github.com/supernova0730/ae86/config"
 	"github.com/supernova0730/ae86/internal/connections"
-	"github.com/supernova0730/ae86/internal/transport"
 	"github.com/supernova0730/ae86/internal/transport/rest"
 	"github.com/supernova0730/ae86/pkg/logger"
 	"github.com/supernova0730/ae86/pkg/minio"
@@ -52,16 +51,15 @@ func Run() {
 		logger.Log.Info("connected to minio...")
 	}
 
-	transport.Start(transport.Config{
-		Rest: rest.Config{
-			Host:      config.Global.HTTPHost,
-			Port:      config.Global.HTTPPort,
-			TLSEnable: config.Global.HTTPTLSEnable,
-			CertFile:  config.Global.HTTPCertFile,
-			KeyFile:   config.Global.HTTPKeyFile,
-		},
+	server := rest.New(rest.Config{
+		Host:      config.Global.HTTPHost,
+		Port:      config.Global.HTTPPort,
+		TLSEnable: config.Global.HTTPTLSEnable,
+		CertFile:  config.Global.HTTPCertFile,
+		KeyFile:   config.Global.HTTPKeyFile,
 	})
 
+	server.StartAsync()
 	logger.Log.Info("http server started...")
 
 	quit := make(chan os.Signal, 1)
@@ -69,4 +67,8 @@ func Run() {
 
 	<-quit
 	logger.Log.Info("shutting down...")
+
+	if err = server.Shutdown(); err != nil {
+		logger.Log.Error("failed to stop rest server", zap.Error(err))
+	}
 }

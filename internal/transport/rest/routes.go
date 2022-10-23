@@ -11,7 +11,8 @@ import (
 	_ "github.com/supernova0730/ae86/docs"
 )
 
-func RegisterRoutes(r fiber.Router) {
+func (s *Server) registerRoutes() {
+	r := s.app
 	controller := controllers.NewContainer(container.MContainer.Services())
 
 	r.Get("/swagger/*", swagger.HandlerDefault)
