@@ -1,7 +1,6 @@
 package container
 
 import (
-	"github.com/supernova0730/ae86/internal/connections"
 	"github.com/supernova0730/ae86/internal/interfaces/container"
 	"sync"
 )
@@ -28,7 +27,7 @@ func (mc *mainContainer) Services() container.IService {
 func (mc *mainContainer) Repositories() container.IRepository {
 	mc.repositoriesInit.Do(func() {
 		if mc.repositories == nil {
-			mc.repositories = NewRepositoryContainer(connections.DBConn)
+			mc.repositories = NewRepositoryContainer()
 		}
 	})
 	return mc.repositories
