@@ -30,7 +30,7 @@ type Config struct {
 	}
 
 	HTTP struct {
-		Host      string `envconfig:"HTTP_HOST" default:"localhost"`
+		Host      string `envconfig:"HTTP_HOST"`
 		Port      string `envconfig:"HTTP_PORT" default:"8000"`
 		TLSEnable bool   `envconfig:"HTTP_TLS_ENABLE" default:"false"`
 		CertFile  string `envconfig:"HTTP_CERTFILE"`
