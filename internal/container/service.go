@@ -59,7 +59,7 @@ func (sc *serviceContainer) Category() iservice.ICategoryService {
 func (sc *serviceContainer) FileStorage() iservice.IFileStorage {
 	sc.fileStorageInit.Do(func() {
 		if sc.fileStorage == nil {
-			if config.Global.MinioEnabled {
+			if config.Global.Minio.Enabled {
 				sc.fileStorage = service.NewFileStorageService(connections.MinioConn)
 			} else {
 				sc.fileStorage = service.NewFileStorageEmulatorService(MContainer)

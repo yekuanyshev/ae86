@@ -10,26 +10,32 @@ import (
 var Global *Config
 
 type Config struct {
-	DBHost     string `envconfig:"DB_HOST" required:"true"`
-	DBPort     string `envconfig:"DB_PORT" required:"true"`
-	DBUser     string `envconfig:"DB_USER" required:"true"`
-	DBPassword string `envconfig:"DB_PASSWORD" required:"true"`
-	DBName     string `envconfig:"DB_NAME" required:"true"`
-	DBSSLMode  string `envconfig:"DB_SSLMODE" default:"disable"`
+	DB struct {
+		Host     string `envconfig:"DB_HOST" required:"true"`
+		Port     string `envconfig:"DB_PORT" required:"true"`
+		User     string `envconfig:"DB_USER" required:"true"`
+		Password string `envconfig:"DB_PASSWORD" required:"true"`
+		Name     string `envconfig:"DB_NAME" required:"true"`
+		SSLMode  string `envconfig:"DB_SSLMODE" default:"disable"`
+	}
 
-	MinioEnabled  bool   `envconfig:"MINIO_ENABLED" default:"false"`
-	MinioHost     string `envconfig:"MINIO_HOST"`
-	MinioPort     string `envconfig:"MINIO_PORT"`
-	MinioUser     string `envconfig:"MINIO_USER"`
-	MinioPassword string `envconfig:"MINIO_PASSWORD"`
-	MinioUseSSL   bool   `envconfig:"MINIO_USE_SSL"`
-	MinioBucket   string `envconfig:"MINIO_BUCKET"`
+	Minio struct {
+		Enabled  bool   `envconfig:"MINIO_ENABLED" default:"false"`
+		Host     string `envconfig:"MINIO_HOST"`
+		Port     string `envconfig:"MINIO_PORT"`
+		User     string `envconfig:"MINIO_USER"`
+		Password string `envconfig:"MINIO_PASSWORD"`
+		UseSSL   bool   `envconfig:"MINIO_USE_SSL"`
+		Bucket   string `envconfig:"MINIO_BUCKET"`
+	}
 
-	HTTPHost      string `envconfig:"HTTP_HOST" default:"localhost"`
-	HTTPPort      string `envconfig:"HTTP_PORT" default:"8000"`
-	HTTPTLSEnable bool   `envconfig:"HTTP_TLS_ENABLE" default:"false"`
-	HTTPCertFile  string `envconfig:"HTTP_CERTFILE"`
-	HTTPKeyFile   string `envconfig:"HTTP_KEYFILE"`
+	HTTP struct {
+		Host      string `envconfig:"HTTP_HOST" default:"localhost"`
+		Port      string `envconfig:"HTTP_PORT" default:"8000"`
+		TLSEnable bool   `envconfig:"HTTP_TLS_ENABLE" default:"false"`
+		CertFile  string `envconfig:"HTTP_CERTFILE"`
+		KeyFile   string `envconfig:"HTTP_KEYFILE"`
+	}
 }
 
 func Load(envPrefix string, filenames ...string) error {

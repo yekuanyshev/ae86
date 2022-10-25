@@ -23,12 +23,12 @@ func Run() {
 	logger.Log.Info("config loaded", zap.Any("config", config.Global))
 
 	err = connections.DBConnect(postgres.Config{
-		Host:     config.Global.DBHost,
-		Port:     config.Global.DBPort,
-		User:     config.Global.DBUser,
-		Password: config.Global.DBPassword,
-		Name:     config.Global.DBName,
-		SSLMode:  config.Global.DBSSLMode,
+		Host:     config.Global.DB.Host,
+		Port:     config.Global.DB.Port,
+		User:     config.Global.DB.User,
+		Password: config.Global.DB.Password,
+		Name:     config.Global.DB.Name,
+		SSLMode:  config.Global.DB.SSLMode,
 	})
 	if err != nil {
 		logger.Log.Fatal("failed to connect to database", zap.Error(err))
@@ -36,14 +36,14 @@ func Run() {
 
 	logger.Log.Info("connected to database...")
 
-	if config.Global.MinioEnabled {
+	if config.Global.Minio.Enabled {
 		err = connections.MinioConnect(context.Background(), minio.Config{
-			Host:     config.Global.MinioHost,
-			Port:     config.Global.MinioPort,
-			User:     config.Global.MinioUser,
-			Password: config.Global.MinioPassword,
-			UseSSL:   config.Global.MinioUseSSL,
-			Bucket:   config.Global.MinioBucket,
+			Host:     config.Global.Minio.Host,
+			Port:     config.Global.Minio.Port,
+			User:     config.Global.Minio.User,
+			Password: config.Global.Minio.Password,
+			UseSSL:   config.Global.Minio.UseSSL,
+			Bucket:   config.Global.Minio.Bucket,
 		})
 		if err != nil {
 			logger.Log.Fatal("failed to connect to minio", zap.Error(err))
@@ -52,11 +52,11 @@ func Run() {
 	}
 
 	server := rest.New(rest.Config{
-		Host:      config.Global.HTTPHost,
-		Port:      config.Global.HTTPPort,
-		TLSEnable: config.Global.HTTPTLSEnable,
-		CertFile:  config.Global.HTTPCertFile,
-		KeyFile:   config.Global.HTTPKeyFile,
+		Host:      config.Global.HTTP.Host,
+		Port:      config.Global.HTTP.Port,
+		TLSEnable: config.Global.HTTP.TLSEnable,
+		CertFile:  config.Global.HTTP.CertFile,
+		KeyFile:   config.Global.HTTP.KeyFile,
 	})
 
 	server.StartAsync()
