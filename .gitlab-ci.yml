@@ -27,7 +27,7 @@ deploy:
         - ssh -o StrictHostKeyChecking=no -i $SSH_KEY $SSH_USER@$SSH_HOST "
             sudo docker rm -f $CONTAINER || true &&
             sudo docker image rm $IMAGE_NAME || true &&
-            sudo docker run --name=$CONTAINER -dp 80:8000 
+            sudo docker run --name=$CONTAINER -dp 8000:8000 
             -e DB_HOST=$DB_HOST 
             -e DB_PORT=$DB_PORT 
             -e DB_USER=$DB_USER 
