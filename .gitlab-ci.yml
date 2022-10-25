@@ -33,7 +33,6 @@ deploy:
             -e DB_USER=$DB_USER 
             -e DB_PASSWORD=$DB_PASSWORD 
             -e DB_NAME=$DB_NAME 
-            -e HTTP_HOST=0.0.0.0 
             $IMAGE_NAME"
 
 
