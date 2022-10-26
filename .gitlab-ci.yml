@@ -34,31 +34,13 @@ deploy:
   script:
     - eval $(ssh-agent -s)
     - cat "$SSH_KEY" | tr -d '\r' | ssh-add - > /dev/null
-    - docker-compose -H "ssh://$SERVER_USER@$SERVER_IP" down --remove-orphans
-    - docker-compose -H "ssh://$SERVER_USER@SERVER_IP" pull
-    - docker-compose -H "ssh://$SERVER_USER@SERVER_IP" up -d
+    - DOCKER_HOST="ssh://$SERVER_USER@$SERVER_IP" docker-compose down --remove-orphans
+    - DOCKER_HOST="ssh://$SERVER_USER@$SERVER_IP" docker-compose pull
+    - DOCKER_HOST="ssh://$SERVER_USER@$SERVER_IP" docker-compose up -d
   only:
     refs:
       - develop
 
-    #deploy:
-    #  stage: deploy
-    #  before_script:
-    #    - chmod 400 $SSH_KEY # IMAGE_NAME: supernova0730/ae86 CONTAINER: ae86
-    #  script:
-    #    - ssh -o StrictHostKeyChecking=no -i $SSH_KEY $SSH_USER@$SSH_HOST "
-    #      sudo docker rm -f $CONTAINER || true &&
-    #      sudo docker image rm $IMAGE_NAME || true &&
-    #      sudo docker run --name=$CONTAINER -dp 8000:8000
-    #      -e DB_HOST=$DB_HOST
-    #      -e DB_PORT=$DB_PORT
-    #      -e DB_USER=$DB_USER
-    #      -e DB_PASSWORD=$DB_PASSWORD
-    #      -e DB_NAME=$DB_NAME
-    #      $IMAGE_NAME"
-    #  only:
-    #    refs:
-    #      - develop
 
 
 
