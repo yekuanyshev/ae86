@@ -2,6 +2,7 @@ version: '3.9'
 
 services:
   ae86:
+    image: supernova0730/ae86
     build: .
     container_name: 'ae86'
     environment:
