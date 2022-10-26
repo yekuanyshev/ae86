@@ -6,3 +6,6 @@ build:
 
 run: build
 	$(BIN_DIR)/$(BIN)
+
+swag:
+	swag init -g ./main.go -o ./docs
