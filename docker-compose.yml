@@ -2,7 +2,7 @@ version: '3.9'
 
 services:
   ae86:
-    image: supernova0730/ae86
+    image: hub.docker.com/repository/docker/supernova0730/ae86
     build: .
     container_name: 'ae86'
     environment:
@@ -17,7 +17,7 @@ services:
       - mynet
 
   postgres:
-    image: postgres
+    image: postgres:latest
     container_name: postgres
     ports:
       - "5432:5432"
@@ -31,7 +31,7 @@ services:
       - mynet
 
   nginx:
-    image: nginx
+    image: nginx:latest
     container_name: nginx
     ports:
       - "80:80"
