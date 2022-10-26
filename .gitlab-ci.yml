@@ -18,6 +18,9 @@ build_image:
     script:
         - docker build --tag $IMAGE_NAME .
         - docker push $IMAGE_NAME
+    only:
+        refs:
+            - develop
 
 deploy:
     stage: deploy
@@ -34,6 +37,9 @@ deploy:
             -e DB_PASSWORD=$DB_PASSWORD 
             -e DB_NAME=$DB_NAME 
             $IMAGE_NAME"
+    only:
+        refs:
+            - develop
 
 
 
