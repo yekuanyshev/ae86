@@ -34,9 +34,9 @@ deploy:
   script:
     - eval $(ssh-agent -s)
     - cat "$SSH_KEY" | tr -d '\r' | ssh-add - > /dev/null
-    - DOCKER_HOST="ssh://$SERVER_USER@$SERVER_IP" docker compose down --remove-orphans
-    - DOCKER_HOST="ssh://$SERVER_USER@$SERVER_IP" docker compose pull
-    - DOCKER_HOST="ssh://$SERVER_USER@$SERVER_IP" docker compose up -d
+    - docker-compose -H "ssh://$SERVER_USER@$SERVER_IP" down --remove-orphans
+    - docker-compose -H "ssh://$SERVER_USER@$SERVER_IP" pull
+    - docker-compose -H "ssh://$SERVER_USER@$SERVER_IP" up -d
   only:
     refs:
       - develop
