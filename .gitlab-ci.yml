@@ -1,6 +1,6 @@
 variables:
   SERVER_IP: 91.201.215.23
-  SERVER_USER: gitlab
+  SERVER_USER: ubuntu
 
 stages:
   - build
