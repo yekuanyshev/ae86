@@ -33,7 +33,7 @@ deploy:
     - docker login -u $REGISTRY_USER -p $REGISTRY_PASS
   script:
     - eval $(ssh-agent -s)
-    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
+    - echo "$SSH_KEY" | tr -d '\r' | ssh-add -
     - mkdir -p ~/.ssh
     - chmod 700 ~/.ssh
     - docker context create remote --docker "host=ssh://$SERVER_USER@$SERVER_IP"
