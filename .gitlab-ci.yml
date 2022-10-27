@@ -31,16 +31,13 @@ deploy:
     DOCKER_TLS_CERTDIR: "/certs"
   before_script:
     - docker login -u $REGISTRY_USER -p $REGISTRY_PASS
+    - chmod 400 $SSH_KEY
   script:
-    # - eval $(ssh-agent -s)
-    # - cat "$SSH_KEY" | ssh-add - > /dev/null
-    # - docker-compose -H "ssh://$SERVER_USER@$SERVER_IP" down --remove-orphans
-    # - docker-compose -H "ssh://$SERVER_USER@$SERVER_IP" pull
-    # - docker-compose -H "ssh://$SERVER_USER@$SERVER_IP" up -d
-    - ssh -o StrictHostKeyChecking=no -i $SSH_KEY $SERVER_USER@$SERVER_IP "
-      docker compose down --remove-orphans
-      docker compose pull
-      docker compose up -d"
+    - eval $(ssh-agent -s)
+    - cat "$SSH_KEY" | ssh-add - > /dev/null
+    - docker-compose -H "ssh://$SERVER_USER@$SERVER_IP" down --remove-orphans
+    - docker-compose -H "ssh://$SERVER_USER@$SERVER_IP" pull
+    - docker-compose -H "ssh://$SERVER_USER@$SERVER_IP" up -d
   only:
     refs:
       - develop
