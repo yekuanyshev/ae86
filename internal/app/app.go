@@ -2,6 +2,10 @@ package app
 
 import (
 	"context"
+	"os"
+	"os/signal"
+	"syscall"
+
 	"github.com/supernova0730/ae86/config"
 	"github.com/supernova0730/ae86/internal/connections"
 	"github.com/supernova0730/ae86/internal/transport/rest"
@@ -9,9 +13,6 @@ import (
 	"github.com/supernova0730/ae86/pkg/minio"
 	"github.com/supernova0730/ae86/pkg/postgres"
 	"go.uber.org/zap"
-	"os"
-	"os/signal"
-	"syscall"
 )
 
 func Run() {

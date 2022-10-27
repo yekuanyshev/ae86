@@ -1,8 +1,9 @@
 package banner
 
 import (
-	"github.com/mattn/go-isatty"
 	"os"
+
+	"github.com/mattn/go-isatty"
 )
 
 const (

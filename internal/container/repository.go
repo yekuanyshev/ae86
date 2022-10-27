@@ -1,10 +1,11 @@
 package container
 
 import (
+	"sync"
+
 	"github.com/supernova0730/ae86/internal/connections"
 	irepository "github.com/supernova0730/ae86/internal/interfaces/repository"
 	"github.com/supernova0730/ae86/internal/repository"
-	"sync"
 )
 
 type repositoryContainer struct {

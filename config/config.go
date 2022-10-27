@@ -2,9 +2,10 @@ package config
 
 import (
 	"errors"
+	"os"
+
 	"github.com/joho/godotenv"
 	"github.com/kelseyhightower/envconfig"
-	"os"
 )
 
 var Global *Config

@@ -1,11 +1,12 @@
 package container
 
 import (
+	"sync"
+
 	"github.com/supernova0730/ae86/config"
 	"github.com/supernova0730/ae86/internal/connections"
 	iservice "github.com/supernova0730/ae86/internal/interfaces/service"
 	"github.com/supernova0730/ae86/internal/service"
-	"sync"
 )
 
 type serviceContainer struct {

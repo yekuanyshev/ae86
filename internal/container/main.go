@@ -1,8 +1,9 @@
 package container
 
 import (
-	"github.com/supernova0730/ae86/internal/interfaces/container"
 	"sync"
+
+	"github.com/supernova0730/ae86/internal/interfaces/container"
 )
 
 var MContainer = &mainContainer{}

@@ -2,11 +2,12 @@ package main
 
 import (
 	"flag"
+	"runtime"
+	"time"
+
 	"github.com/supernova0730/ae86/internal/app"
 	"github.com/supernova0730/ae86/pkg/banner"
 	"github.com/supernova0730/ae86/pkg/logger"
-	"runtime"
-	"time"
 )
 
 const bannerTemplate = `

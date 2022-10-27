@@ -1,6 +1,9 @@
 package middlewares
 
 import (
+	"net/http"
+	"time"
+
 	"github.com/gofiber/fiber/v2"
 	"github.com/supernova0730/ae86/internal/logger"
 	"github.com/supernova0730/ae86/internal/transport/utils"
@@ -8,8 +11,6 @@ import (
 	"github.com/supernova0730/ae86/pkg/tools"
 	"github.com/supernova0730/ae86/pkg/uuid"
 	"go.uber.org/zap"
-	"net/http"
-	"time"
 )
 
 func SetContextHolder() fiber.Handler {

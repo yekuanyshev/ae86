@@ -3,13 +3,14 @@ package service
 import (
 	"bytes"
 	"context"
+	"io"
+	"path/filepath"
+
 	"github.com/supernova0730/ae86/internal/logger"
 	"github.com/supernova0730/ae86/internal/model"
 	"github.com/supernova0730/ae86/pkg/minio"
 	"github.com/supernova0730/ae86/pkg/uuid"
 	"go.uber.org/zap"
-	"io"
-	"path/filepath"
 )
 
 type FileStorageService struct {

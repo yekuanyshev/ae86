@@ -1,11 +1,12 @@
 package controllers
 
 import (
+	"net/http"
+
 	"github.com/gofiber/fiber/v2"
 	"github.com/supernova0730/ae86/internal/interfaces/container"
 	"github.com/supernova0730/ae86/internal/transport/rest/response"
 	"github.com/supernova0730/ae86/internal/transport/utils"
-	"net/http"
 )
 
 type ProductController struct {

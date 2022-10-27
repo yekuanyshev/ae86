@@ -2,13 +2,14 @@ package controllers
 
 import (
 	"errors"
+	"io"
+	"mime/multipart"
+	"net/http"
+
 	"github.com/gofiber/fiber/v2"
 	"github.com/supernova0730/ae86/internal/interfaces/container"
 	"github.com/supernova0730/ae86/internal/model"
 	"github.com/supernova0730/ae86/internal/transport/rest/response"
-	"io"
-	"mime/multipart"
-	"net/http"
 )
 
 type FileController struct {

@@ -2,6 +2,7 @@ package rest
 
 import (
 	"encoding/json"
+
 	"github.com/gofiber/fiber/v2"
 	"github.com/supernova0730/ae86/pkg/logger"
 	"go.uber.org/zap"

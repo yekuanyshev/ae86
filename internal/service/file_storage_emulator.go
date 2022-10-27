@@ -2,12 +2,13 @@ package service
 
 import (
 	"context"
+	"path/filepath"
+
 	"github.com/supernova0730/ae86/internal/interfaces/container"
 	"github.com/supernova0730/ae86/internal/logger"
 	"github.com/supernova0730/ae86/internal/model"
 	"github.com/supernova0730/ae86/pkg/uuid"
 	"go.uber.org/zap"
-	"path/filepath"
 )
 
 type FileStorageEmulatorService struct {
