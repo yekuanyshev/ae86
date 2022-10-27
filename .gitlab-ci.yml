@@ -32,8 +32,8 @@ deploy:
   before_script:
     - docker login -u $REGISTRY_USER -p $REGISTRY_PASS
   script:
-    - eval $(ssh-agent -s)
-    - cat "$SSH_KEY" | tr -d '\r' | ssh-add - > /dev/null
+    # - eval $(ssh-agent -s)
+    # - cat "$SSH_KEY" | tr -d '\r' | ssh-add - > /dev/null
     - docker-compose -H "ssh://$SERVER_USER@$SERVER_IP" down --remove-orphans
     - docker-compose -H "ssh://$SERVER_USER@$SERVER_IP" pull
     - docker-compose -H "ssh://$SERVER_USER@$SERVER_IP" up -d
