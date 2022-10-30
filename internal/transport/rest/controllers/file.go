@@ -86,6 +86,7 @@ func (ctl *FileController) uploadFile(c *fiber.Ctx, fileHeader *multipart.FileHe
 
 	file := model.File{
 		Content:     raw,
+		Filename:    fileHeader.Filename,
 		Name:        fileHeader.Filename,
 		Size:        fileHeader.Size,
 		ContentType: http.DetectContentType(raw),

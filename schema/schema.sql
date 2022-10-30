@@ -92,6 +92,7 @@ CREATE TABLE IF NOT EXISTS order_item
 CREATE TABLE IF NOT EXISTS file
 (
     id           SERIAL PRIMARY KEY,
+    filename     VARCHAR        NOT NULL,
     name         VARCHAR UNIQUE NOT NULL,
     content_type VARCHAR        NOT NULL,
     size         INTEGER        NOT NULL,
