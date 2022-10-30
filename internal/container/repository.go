@@ -18,6 +18,9 @@ type repositoryContainer struct {
 	fileInit sync.Once
 	file     irepository.IFileRepository
 
+	ingredientInit sync.Once
+	ingredient     irepository.IIngredientRepository
+
 	managerInit sync.Once
 	manager     irepository.IManagerRepository
 
@@ -63,6 +66,15 @@ func (rc *repositoryContainer) File() irepository.IFileRepository {
 		}
 	})
 	return rc.file
+}
+
+func (rc *repositoryContainer) Ingredient() irepository.IIngredientRepository {
+	rc.ingredientInit.Do(func() {
+		if rc.ingredient == nil {
+			rc.ingredient = repository.NewIngredientRepository(connections.DBConn)
+		}
+	})
+	return rc.ingredient
 }
 
 func (rc *repositoryContainer) Manager() irepository.IManagerRepository {

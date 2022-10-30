@@ -21,13 +21,28 @@ func (service *ProductService) ByID(ctx context.Context, storeID int64, id int64
 		return
 	}
 
-	return views.ProductFull{
+	ingredients, err := service.mc.Repositories().Ingredient().ListActiveIngredientsByProductID(ctx, product.ID)
+	if err != nil {
+		return
+	}
+
+	view = views.ProductFull{
 		ID:          product.ID,
 		Title:       product.Title,
 		Price:       product.Price,
 		Description: product.Description,
 		Image:       product.Image,
-	}, nil
+	}
+
+	for _, ingredient := range ingredients {
+		view.Ingredients = append(view.Ingredients, views.Ingredient{
+			ID:    ingredient.ID,
+			Title: ingredient.Title,
+			Price: ingredient.Price,
+		})
+	}
+
+	return
 }
 
 func (service *ProductService) ListByCategoryID(ctx context.Context, storeID int64, categoryID int64) (result []views.ProductShort, err error) {

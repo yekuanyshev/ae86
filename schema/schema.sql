@@ -47,6 +47,16 @@ CREATE TABLE IF NOT EXISTS product
     CONSTRAINT price_check CHECK ( price > 0 )
 );
 
+CREATE TABLE IF NOT EXISTS ingredient
+(
+    id         SERIAL PRIMARY KEY,
+    title      VARCHAR NOT NULL,
+    price      INTEGER NOT NULL,
+    is_active  BOOL    NOT NULL DEFAULT true,
+    product_id INTEGER REFERENCES product (id),
+    CONSTRAINT price_check CHECK ( price > 0 )
+);
+
 CREATE TYPE order_payment_method AS ENUM ('CASH', 'CARD');
 CREATE TYPE order_state AS ENUM ('PENDING', 'CANCELED', 'ACCEPTED', 'DELIVERY_IN_PROGRESS', 'DELIVERED');
 CREATE TYPE order_delivery_method AS ENUM ('BY_COURIER', 'TAKEAWAY');

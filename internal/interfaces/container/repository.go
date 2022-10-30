@@ -6,6 +6,7 @@ type IRepository interface {
 	Banner() repository.IBannerRepository
 	Category() repository.ICategoryRepository
 	File() repository.IFileRepository
+	Ingredient() repository.IIngredientRepository
 	Manager() repository.IManagerRepository
 	Order() repository.IOrderRepository
 	OrderItem() repository.IOrderItemRepository
