@@ -43,7 +43,7 @@ func (ctl *FileController) Upload(c *fiber.Ctx) error {
 
 	filename, err := ctl.uploadFile(c, src)
 	if err != nil {
-		return err
+		return response.Error(c, http.StatusInternalServerError, err)
 	}
 
 	return c.Status(http.StatusOK).JSON(fiber.Map{

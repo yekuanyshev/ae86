@@ -25,7 +25,10 @@ func (s *FileStorageEmulatorService) Upload(ctx context.Context, file model.File
 			logger.LogWithCtx(ctx).Error(
 				"FileStorageEmulatorService.Upload failed",
 				zap.Error(err),
-				zap.Any("file", file),
+				zap.String("file.Filename", file.Filename),
+				zap.String("file.Name", file.Name),
+				zap.String("file.ContentType", file.ContentType),
+				zap.Int64("file.Size", file.Size),
 			)
 		}
 	}()
